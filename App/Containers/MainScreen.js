@@ -10,12 +10,24 @@ import OverviewScreen from './Overview/OverviewScreen'
 import OrdersScreen from './Order/OrdersScreen'
 import EmergencyScreen from './Emergency/EmergencyScreen'
 import Loading from '../Components/Loading';
+import NavigationIcon from '../Components/NavigationIcon';
 
 class MainScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
             selectedTab: 'overview'
+        }
+    }
+
+    static navigationOptions = (props) => {
+        return {
+            headerRight: (
+                <NavigationIcon
+                    onPress={() => props.navigation.navigate('Search')}
+                    source={Images.search}
+                />
+            ),
         }
     }
 

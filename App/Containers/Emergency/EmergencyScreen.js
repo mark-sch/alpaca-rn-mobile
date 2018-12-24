@@ -70,12 +70,6 @@ const styles = {
         flex: 1,
         padding: 75
     },
-    logo: {
-        height: Metrics.images.titleLogo,
-        width: Metrics.images.titleLogo,
-        resizeMode: 'contain',
-        marginRight: Metrics.baseMargin
-    },
     label: {
         ...Fonts.style.h3,
         color: Colors.COLOR_GRAY,

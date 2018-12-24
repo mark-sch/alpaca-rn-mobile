@@ -13,11 +13,23 @@ const ApplicationStyles = {
             padding: 30
         },
         statusbar: {
-            height: Metrics.navBarHeight,
+            height: 0,
             backgroundColor: Colors.COLOR_NAV_HEADER,
             justifyContent: 'center',
             alignItems:'center',
             flexDirection:'row'
+        },
+        navSearchIcon: {
+            height: 27,
+            width: 27,
+            resizeMode: 'contain',
+            marginRight: Metrics.doubleBaseMargin
+        },
+        logo: {
+            height: Metrics.images.titleLogo,
+            width: Metrics.images.titleLogo,
+            resizeMode: 'contain',
+            marginRight: Metrics.baseMargin
         },
         tabContainer: {
             flex: 1,

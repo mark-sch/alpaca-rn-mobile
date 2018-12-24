@@ -205,12 +205,6 @@ class OverviewScreen extends Component {
 
 const styles = {
     ...ApplicationStyles.screen,
-    logo: {
-        height: Metrics.images.titleLogo,
-        width: Metrics.images.titleLogo,
-        resizeMode: 'contain',
-        marginRight: Metrics.baseMargin
-    },
     h1: {
         ...Fonts.style.h1,
         color: Colors.COLOR_CORE_TEXT

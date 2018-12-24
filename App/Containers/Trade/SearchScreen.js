@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, Image, FlatList, StatusBar } from 'react-native'
+import {
+    View,
+    Text,
+    Image,
+    FlatList
+} from 'react-native'
 import { connect } from 'react-redux'
 
 import {
@@ -9,35 +14,30 @@ import {
     Metrics,
     Fonts
 } from '../../Themes'
-import PositionItem from './PositionItem'
+import OrderItem from '../Order/OrderItem';
 
-class PositionScreen extends Component {
+class SearchScreen extends Component {
 
     componentDidMount() {
-        console.log('positions did mount')
     }
 
     componentWillReceiveProps(nextProps) {
     }
 
     render() {
-        const { positions } = this.props
-        console.log('positions get:', positions)
+        const { orders } = this.props
+        console.log('orders get:', orders)
 
         return (
             <View style={styles.container}>
-                <View style={styles.statusbar}>
-                    <Image source={Images.logo} style={styles.logo}></Image>
-                </View>
                 <View style={styles.mainContainer}>
-                    <Text style={styles.label}>Positions</Text>
                     <FlatList
                         style={styles.list}
-                        data={positions}
-                        keyExtractor={item => item.asset_id}
+                        data={orders}
+                        keyExtractor={item => item.id}
                         renderItem={({ item, index }) => {
                             return (
-                                <PositionItem position={item} />
+                                <OrderItem order={item} />
                             )
                         }}
                     />
@@ -45,15 +45,10 @@ class PositionScreen extends Component {
             </View>
         )
     }
-   
 }
 
 const styles = {
     ...ApplicationStyles.screen,
-    label: {
-        ...Fonts.style.h3,
-        color: Colors.COLOR_GRAY
-    },
     list: {
         flex: 1,
         marginTop: 40
@@ -62,8 +57,8 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
-        positions: state.positions.positions
+        orders: state.orders.orders,
     }
 }
 
-export default connect(mapStateToProps, null)(PositionScreen)
+export default connect(mapStateToProps, null)(SearchScreen)

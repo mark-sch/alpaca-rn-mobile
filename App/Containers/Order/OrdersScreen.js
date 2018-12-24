@@ -54,12 +54,6 @@ class OrdersScreen extends Component {
 
 const styles = {
     ...ApplicationStyles.screen,
-    logo: {
-        height: Metrics.images.titleLogo,
-        width: Metrics.images.titleLogo,
-        resizeMode: 'contain',
-        marginRight: Metrics.baseMargin
-    },
     label: {
         ...Fonts.style.h3,
         color: Colors.COLOR_GRAY
