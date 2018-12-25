@@ -23,7 +23,8 @@ const ApplicationStyles = {
             height: 27,
             width: 27,
             resizeMode: 'contain',
-            marginRight: Metrics.doubleBaseMargin
+            marginRight: Metrics.baseMargin,
+            marginLeft: Metrics.baseMargin
         },
         logo: {
             height: Metrics.images.titleLogo,

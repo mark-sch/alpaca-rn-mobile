@@ -25,6 +25,17 @@ class SearchScreen extends Component {
         filteredItems: []
     }
 
+    static navigationOptions = (props) => {
+        return {
+            headerLeft: (
+                <NavigationIcon
+                    onPress={() => props.navigation.pop()}
+                    source={Images.back}
+                />
+            ),
+        }
+    }
+
     componentDidMount() {
         let { orders, positions } = this.props
 
@@ -65,7 +76,7 @@ class SearchScreen extends Component {
                         maxLength={40}
                     />
                     <NavigationIcon
-                        style={styles.navIcon}
+                        style={styles.navSearchIcon}
                         iconStyle={{ tintColor: Colors.COLOR_NAV_HEADER, marginRight: 0 }}
                         source={Images.search}
                     />
@@ -99,7 +110,7 @@ const styles = {
         borderBottomColor: 'rgba(0, 0, 0, 0.5)',
         borderBottomWidth: 1,
     },
-    navIcon: {
+    navSearchIcon: {
         position: 'absolute',
         right: 0
     },
