@@ -19,7 +19,7 @@ const ApplicationStyles = {
             alignItems:'center',
             flexDirection:'row'
         },
-        navSearchIcon: {
+        navIcon: {
             height: 27,
             width: 27,
             resizeMode: 'contain',

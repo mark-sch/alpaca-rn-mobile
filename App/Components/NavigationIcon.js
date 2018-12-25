@@ -13,14 +13,15 @@ import {
 
 const NavigationIcon = ({
     style,
+    iconStyle,
     source,
     onPress
 }) => {
 
     return (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} style={style}>
             <Image
-                style={[ApplicationStyles.screen.navSearchIcon, style]}
+                style={[ApplicationStyles.screen.navIcon, iconStyle]}
                 source={source}
             />
         </TouchableOpacity>
@@ -30,6 +31,7 @@ const NavigationIcon = ({
 NavigationIcon.propTypes = {
     onPress: PropTypes.func,
     style: ViewPropTypes.style,
+    iconStyle: PropTypes.object,
     source: PropTypes.number.isRequired,
 }
 

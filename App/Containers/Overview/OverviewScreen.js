@@ -52,11 +52,10 @@ class OverviewScreen extends Component {
 
     mergeOrders = (source) => {
         let mergeOrders = mergeArray(source)
-        mergeOrders.push({
+        mergeOrders.push({ // to render last total row
             status: 'total',
             data: []
         })
-        // console.log('------000', mergeOrders)
         this.setState( { mergeOrders })
     }
 
@@ -101,8 +100,8 @@ class OverviewScreen extends Component {
         const positionSumStyle = positionSum > 0 ? styles.upText : styles.downText
         const portfolioSumColor = positionSum > 0 ? Colors.COLOR_GREEN: Colors.COLOR_DARK_RED
 
-        console.log('account data:', account)
-        console.log('orders data:', orders)
+        // console.log('account data:', account)
+        // console.log('orders data:', orders)
         return (
             <View style={styles.container}>
                 <View style={styles.statusbar}>
