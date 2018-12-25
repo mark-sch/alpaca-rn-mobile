@@ -40,11 +40,13 @@ class SearchScreen extends Component {
         let { orders, positions } = this.props
 
         orders = orders.map(item => {
-            const updatedItem = { ...item, asset_id: item.id }
+            const updatedItem = {
+                ...item,
+                asset_id: item.id
+            }
             return updatedItem
         })
         const totalItems = positions.concat(orders)
-        // console.log('totalItems get:', totalItems.length)
         this.setState({ totalItems })
     }
 

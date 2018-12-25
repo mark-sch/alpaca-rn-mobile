@@ -5,7 +5,13 @@ import Immutable from 'seamless-immutable'
 const { Types, Creators } = createActions({
     getOrdersAttempt: null,
     getOrdersSuccess: ['data'],
-    getOrdersFailure: ['error']
+    getOrdersFailure: ['error'],
+    cancelOrderAttempt: ['order_id'],
+    cancelOrderSuccess: null,
+    cancelOrderFailure: ['error'],
+    postOrderAttempt: ['data'],
+    postOrderSuccess: null,
+    postOrderFailure: ['error'],
 })
 
 export const OrdersTypes = Types
@@ -15,7 +21,9 @@ export default Creators
 export const INITIAL_STATE = Immutable({
     orders: [],
     status: '',
-    fetching: true,
+    fetching: false,
+    cancelingOrder: false,
+    postingOrder: false,
     errorMessage: '',
     error: false
 })
@@ -33,9 +41,39 @@ export const getOrdersFailure = (state, action) => {
     return state.merge({ fetching: false, error: true, errorMessage: action.error })
 }
 
+export const cancelOrderAttempt = (state, action) => {
+    return state.merge({ cancelingOrder: true, error: false, errorMessage: '' })
+}
+
+export const cancelOrderSuccess = (state, action) => {
+    return state.merge({ cancelingOrder: false, error: false, errorMessage: ''})
+}
+
+export const cancelOrderFailure = (state, action) => {
+    return state.merge({ cancelingOrder: false, error: true, errorMessage: action.error })
+}
+
+export const postOrderAttempt = (state, action) => {
+    return state.merge({ postingOrder: true, error: false, errorMessage: '' })
+}
+
+export const postOrderSuccess = (state, action) => {
+    return state.merge({ postingOrder: false, error: false, errorMessage: ''})
+}
+
+export const postOrderFailure = (state, action) => {
+    return state.merge({ postingOrder: false, error: true, errorMessage: action.error })
+}
+
 /* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
     [Types.GET_ORDERS_ATTEMPT]: getOrdersAttempt,
     [Types.GET_ORDERS_SUCCESS]: getOrdersSuccess,
-    [Types.GET_ORDERS_FAILURE]: getOrdersFailure
+    [Types.GET_ORDERS_FAILURE]: getOrdersFailure,
+    [Types.CANCEL_ORDER_ATTEMPT]: cancelOrderAttempt,
+    [Types.CANCEL_ORDER_SUCCESS]: cancelOrderSuccess,
+    [Types.CANCEL_ORDER_FAILURE]: cancelOrderFailure,
+    [Types.POST_ORDER_ATTEMPT]: postOrderAttempt,
+    [Types.POST_ORDER_SUCCESS]: postOrderSuccess,
+    [Types.POST_ORDER_FAILURE]: postOrderFailure
 })

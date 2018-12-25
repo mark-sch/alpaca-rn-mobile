@@ -5,30 +5,57 @@ import {
     Image,
 } from 'react-native'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
+import OrdersActions from '../../Redux/OrdersRedux'
 import {
     ApplicationStyles,
     Images,
     Colors,
-    Metrics,
     Fonts
 } from '../../Themes'
 import Button from '../../Components/Button'
 
 class EmergencyScreen extends Component {
 
-    componentDidMount() {
-        console.log('emergency did mount')
+    componentWillReceiveProps(nextProps) {
     }
 
-    componentWillReceiveProps(nextProps) {
+    cancelOrders = () => {
+        const {
+            orders,
+            cancelOrder,
+        } = this.props
+
+        orders.map(item => {
+            cancelOrder(item.id)
+        })
+    }
+
+    requestOrders = () => {
+        const {
+            positions,
+            postOrder
+        } = this.props
+
+        positions.map(item => {
+            const updatedItem = {
+                ...item,
+                type: "market",
+                time_in_force: "day",
+                side: "buy"
+            }
+            postOrder(updatedItem)
+        })
     }
 
     render() {
         const {
             orders,
             positions,
-            suspendAPI
+            suspendAPI,
+            cancelingOrder,
+            postingOrder
         } = this.props
 
         return (
@@ -48,15 +75,15 @@ class EmergencyScreen extends Component {
                     <Button
                         style={styles.button}
                         label="LIQUIDATE ALL"
-						isLoading={false}
-						// onPress={() => suspendAPI()}
+						isLoading={postingOrder}
+						onPress={this.requestOrders}
 					/>
                     <Text style={styles.label}>Pending Orders: {orders.length}</Text>
                     <Button
                         style={styles.button}
                         label="CANCEL ALL"
-						isLoading={false}
-						// onPress={() => suspendAPI()}
+						isLoading={cancelingOrder}
+						onPress={this.cancelOrders}
 					/>
                 </View>
             </View>
@@ -82,6 +109,8 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
+        cancelingOrder: state.orders.cancelingOrder,
+        postingOrder: state.orders.postingOrder,
         orders: state.orders.orders,
         positions: state.positions.positions 
     }
@@ -89,6 +118,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        cancelOrder: order_id => dispatch(OrdersActions.cancelOrderAttempt(order_id)),
+        postOrder: data => dispatch(OrdersActions.postOrderAttempt(data)),
     }
 }
 

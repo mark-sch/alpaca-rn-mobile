@@ -56,7 +56,8 @@ const styles = {
     },
     list: {
         flex: 1,
-        marginTop: 40
+        marginTop: 40,
+        paddingRight: 5
     }
 }
 
