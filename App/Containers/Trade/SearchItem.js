@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {
     View,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native'
 import PropTypes from 'prop-types'
 
@@ -14,37 +15,39 @@ import {
 class SearchItem extends Component {
 
     render() {
-        const { position } = this.props
-        const mainValue = `${position.qty}@${position.avg_entry_price}`
+        const { position, symbolStyle, onPress } = this.props
         const plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
         const percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
 
         return (
-            <View style={{ marginBottom: 10 }}>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.h2}>
+            <TouchableOpacity
+                activeOpacity={0.9}
+                style={styles.rowContainer}
+                onPress={onPress}
+            >
+                <View style={{ alignSelf: 'center' }}>
+                    <Text style={[styles.h2, symbolStyle]}>
                         {position.symbol}
                     </Text>
-                    <Text style={plStyle}>
-                        ${position.unrealized_intraday_pl}
-                    </Text>
                 </View>
-                <View style={styles.rowContainer}>
+                <View style={styles.valueContainer}>
                     <Text style={styles.h3}>
-                        {mainValue}
+                        ${position.unrealized_intraday_pl}
                     </Text>
                     <Text style={plStyle}>
                         {percentValue}%
                     </Text>
                 </View>
                 <View style={styles.separator} />
-            </View>
+            </TouchableOpacity>
         )
     }
 }
 
 SearchItem.propTypes = {
     position: PropTypes.object.isRequired,
+    symbolStyle: PropTypes.object,
+    onPress: PropTypes.func
 }
 
 const styles = {
@@ -67,8 +70,12 @@ const styles = {
     },
     rowContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
+    valueContainer: {
+        alignItems: 'flex-end',
+        backgroundColor: 'pink'
     }
 }
 

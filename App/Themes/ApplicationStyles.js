@@ -60,7 +60,11 @@ const ApplicationStyles = {
             backgroundColor: Colors.COLOR_GRAY,
             marginTop: 2,
             marginBottom: 2
-        }
+        },
+        label: {
+            ...Fonts.style.h3,
+            color: Colors.COLOR_GRAY
+        },
     }
 }
 

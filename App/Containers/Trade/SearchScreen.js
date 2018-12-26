@@ -89,10 +89,14 @@ class SearchScreen extends Component {
                     keyExtractor={item => item.asset_id}
                     renderItem={({ item }) => {
                         return (
-                            item.id ?
-                                <OrderItem order={item} />
-                            :
-                                <PositionItem position={item} />
+                            <SearchItem
+                                position={item}
+                                onPress={() =>
+                                    this.props.navigation.navigate('Trade', {
+                                        value: item
+                                    })
+                                }
+                            />
                         )
                     }}
                 />

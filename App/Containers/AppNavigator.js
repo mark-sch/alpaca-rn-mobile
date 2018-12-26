@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation';
 import MainScreen from './MainScreen'
 import RegisterScreen from './User/RegisterScreen'
 import SearchScreen from './Trade/SearchScreen'
+import TradeScreen from './Trade/TradeScreen'
 import { Colors } from '../Themes';
 
 const AppNavigator = createStackNavigator(
@@ -10,6 +11,7 @@ const AppNavigator = createStackNavigator(
         Main: MainScreen,
         Register: RegisterScreen,
         Search: SearchScreen,
+        Trade: TradeScreen
     },
     {
         initialRouteName: "Main",

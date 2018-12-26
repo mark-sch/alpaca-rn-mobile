@@ -96,7 +96,7 @@ class OverviewScreen extends Component {
             positionDownCount,
             mergeOrders
         } = this.state
-        const positionSum = positionUpSum + positionDownSum
+        const positionSum = (positionUpSum + positionDownSum).toFixed(2)
         const positionSumStyle = positionSum > 0 ? styles.upText : styles.downText
         const portfolioSumColor = positionSum > 0 ? Colors.COLOR_GREEN: Colors.COLOR_DARK_RED
 
@@ -137,7 +137,7 @@ class OverviewScreen extends Component {
                                 {positionUpCount}
                             </Text>
                             <Text style={[styles.upText, { textAlign: 'right' }]}>
-                                ${positionUpSum}
+                                ${positionUpSum.toFixed(2)}
                             </Text>
                         </View>
                         <View style={styles.positionsRow}>
@@ -148,7 +148,7 @@ class OverviewScreen extends Component {
                                 {positionDownCount}
                             </Text>
                             <Text style={[styles.downText, { textAlign: 'right' }]}>
-                                ${positionDownSum}
+                                ${positionDownSum.toFixed(2)}
                             </Text>
                         </View>
                         <View style={styles.separator} />
