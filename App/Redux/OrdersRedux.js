@@ -10,7 +10,7 @@ const { Types, Creators } = createActions({
     cancelOrderSuccess: null,
     cancelOrderFailure: ['error'],
     postOrderAttempt: ['data'],
-    postOrderSuccess: null,
+    postOrderSuccess: ['data'],
     postOrderFailure: ['error'],
 })
 
@@ -24,6 +24,7 @@ export const INITIAL_STATE = Immutable({
     fetching: false,
     cancelingOrder: false,
     postingOrder: false,
+    orderResult: null,
     errorMessage: '',
     error: false
 })
@@ -58,7 +59,7 @@ export const postOrderAttempt = (state, action) => {
 }
 
 export const postOrderSuccess = (state, action) => {
-    return state.merge({ postingOrder: false, error: false, errorMessage: ''})
+    return state.merge({ postingOrder: false, error: false, errorMessage: '', orderResult: action.data })
 }
 
 export const postOrderFailure = (state, action) => {

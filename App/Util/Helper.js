@@ -25,6 +25,7 @@ export const convert = (value, percent = false) => {
         } else
             return `+${value}%`
     } else if (value < 0) {
+        value = Math.abs(value)
         if (!percent) {
             return `-$${value}`
         } else

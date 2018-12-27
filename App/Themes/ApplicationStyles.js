@@ -10,7 +10,7 @@ const ApplicationStyles = {
         },
         mainContainer: {
             flex: 1,
-            padding: 30
+            padding: 33
         },
         statusbar: {
             height: 0,

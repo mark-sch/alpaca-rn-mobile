@@ -11,7 +11,11 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
-import { convert } from '../../Util/Helper';
+import OrdersActions from '../../Redux/OrdersRedux'
+import { 
+    convert,
+    capitalize
+} from '../../Util/Helper';
 import NavigationIcon from '../../Components/NavigationIcon'
 import Button from '../../Components/Button'
 import OrderItem from '../Order/OrderItem';
@@ -19,6 +23,10 @@ import PositionItem from '../Position/PositionItem';
 import SearchItem from './SearchItem';
 
 class TradeScreen extends Component {
+
+    state = {
+        submitted: false,
+    }
 
     static navigationOptions = (props) => {
         return {
@@ -37,7 +45,30 @@ class TradeScreen extends Component {
         }
     }
 
-    renderValueDetail(value) {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.postingOrder && !nextProps.postingOrder) {
+            this.setState({
+                submitted: true,
+            })
+        }
+    }
+
+    requestOrder = (value) => {
+        const {
+            postOrder
+        } = this.props
+
+        const updatedValue = {
+            ...value,
+            type: "market",
+            time_in_force: "day",
+            side: "buy"
+        }
+        postOrder(updatedValue)
+    }
+
+    renderValueDetail = (value) => {
+        const { postingOrder } = this.props
         const mainValue = `${value.qty}@${value.avg_entry_price}`
         const plStyle = value.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
         const percentValue = (value.unrealized_intraday_plpc * 100).toFixed(2)
@@ -67,14 +98,64 @@ class TradeScreen extends Component {
                     color={Colors.COLOR_NAV_HEADER}
                     labelColor={Colors.BLACK}
                     height={50}
-                    isLoading={false}
+                    isLoading={postingOrder}
+                    onPress={() => this.requestOrder(value)}
+                />
+            </View>
+        )
+    }
+
+    renderResult = (orderResult) => {
+        return (
+            <View style={styles.container}>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.label}>
+                        Side
+                    </Text>
+                    <Text style={styles.value}>
+                        {capitalize(orderResult.side)}
+                    </Text>
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.label}>
+                        Type
+                    </Text>
+                    <Text style={styles.value}>
+                        {capitalize(orderResult.type)}
+                    </Text>
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.label}>
+                        Time in Force
+                    </Text>
+                    <Text style={styles.value}>
+                        {capitalize(orderResult.time_in_force)}
+                    </Text>
+                </View>
+                <View style={styles.rowContainer}>
+                    <Text style={styles.label}>
+                        Limit Price
+                    </Text>
+                    <Text style={styles.value}>
+                        {orderResult.limit_price ? orderResult.limit_price : '-'}
+                    </Text>
+                </View>
+                <Text>
+                    {JSON.stringify(orderResult, undefined, 4)}
+                </Text>
+                <Button
+                    style={styles.button}
+                    label="Submitted!"
+                    color={Colors.COLOR_GRAY}
+                    labelColor={Colors.WHITE}
+                    height={50}
                 />
             </View>
         )
     }
 
     render() {
-        const { navigation } = this.props
+        const { navigation, orderResult } = this.props
         const value = navigation.getParam('value');
 
         return (
@@ -83,7 +164,9 @@ class TradeScreen extends Component {
                     position={value}
                     symbolStyle={styles.symbol}
                 />
-                {this.renderValueDetail(value)}
+                {
+                    this.state.submitted ? this.renderResult(orderResult) : this.renderValueDetail(value)
+                }
             </View>
         )
     }
@@ -91,6 +174,10 @@ class TradeScreen extends Component {
 
 const styles = {
     ...ApplicationStyles.screen,
+    container: {
+        ...ApplicationStyles.screen.container,
+        marginTop: 30
+    },
     h2: {
         ...Fonts.style.h2,
         color: Colors.BLACK
@@ -127,14 +214,23 @@ const styles = {
         left: 0,
         right: 0,
         marginBottom: 25
-	},
+    },
+    value: {
+        ...Fonts.style.h3,
+        fontSize: 19,
+        color: Colors.COLOR_GOLD
+    }
 }
 
 const mapStateToProps = (state) => {
     return {
-        orders: state.orders.orders,
-        positions: state.positions.positions
+        postingOrder: state.orders.postingOrder,
+        orderResult: state.orders.orderResult
     }
 }
 
-export default connect(mapStateToProps, null)(TradeScreen)
+const mapDispatchToProps = (dispatch) => ({
+    postOrder: data => dispatch(OrdersActions.postOrderAttempt(data)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(TradeScreen)

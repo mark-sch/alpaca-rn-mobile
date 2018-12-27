@@ -33,7 +33,7 @@ class SearchItem extends Component {
                 </View>
                 <View style={styles.valueContainer}>
                     <Text style={styles.h3}>
-                        ${position.unrealized_intraday_pl}
+                        {convert(position.unrealized_intraday_pl)}
                     </Text>
                     <Text style={plStyle}>
                         {convert(percentValue, true)}
