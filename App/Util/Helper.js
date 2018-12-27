@@ -17,3 +17,22 @@ export const mergeArray = (array) => {
 
     return result
 }
+
+export const convert = (value, percent = false) => {
+    if (value > 0) {
+        if (!percent) {
+            return `+$${value}`
+        } else
+            return `+${value}%`
+    } else if (value < 0) {
+        if (!percent) {
+            return `-$${value}`
+        } else
+            return `-${value}%`
+    } else {
+        if (!percent) {
+            return `$${value}`
+        } else
+            return `${value}%`
+    }
+}

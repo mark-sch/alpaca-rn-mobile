@@ -11,6 +11,7 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
+import { convert } from '../../Util/Helper';
 import NavigationIcon from '../../Components/NavigationIcon'
 import Button from '../../Components/Button'
 import OrderItem from '../Order/OrderItem';
@@ -52,7 +53,7 @@ class TradeScreen extends Component {
                             {mainValue}
                         </Text>
                         <Text style={plStyle}>
-                            {percentValue}%
+                            {convert(percentValue, true)}
                         </Text>
                     </View>
                 </View>

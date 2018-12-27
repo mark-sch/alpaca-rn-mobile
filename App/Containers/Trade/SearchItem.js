@@ -11,6 +11,7 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
+import { convert } from '../../Util/Helper';
 
 class SearchItem extends Component {
 
@@ -35,7 +36,7 @@ class SearchItem extends Component {
                         ${position.unrealized_intraday_pl}
                     </Text>
                     <Text style={plStyle}>
-                        {percentValue}%
+                        {convert(percentValue, true)}
                     </Text>
                 </View>
                 <View style={styles.separator} />

@@ -19,7 +19,8 @@ import {
 } from '../../Themes'
 import {
     mergeArray,
-    capitalize
+    capitalize,
+    convert
 } from '../../Util/Helper';
 
 class OverviewScreen extends Component {
@@ -115,7 +116,7 @@ class OverviewScreen extends Component {
                         ${account && account.portfolio_value}
                     </Text>
                     <Text style={[styles.h3, { color: portfolioSumColor }]}>
-                        ${positionSum}
+                        {convert(positionSum)}
                     </Text>
 
                     <Text style={[styles.label, { marginTop: 8 }]}>
@@ -137,7 +138,7 @@ class OverviewScreen extends Component {
                                 {positionUpCount}
                             </Text>
                             <Text style={[styles.upText, { textAlign: 'right' }]}>
-                                ${positionUpSum.toFixed(2)}
+                                {convert(positionUpSum.toFixed(2))}
                             </Text>
                         </View>
                         <View style={styles.positionsRow}>
@@ -148,7 +149,7 @@ class OverviewScreen extends Component {
                                 {positionDownCount}
                             </Text>
                             <Text style={[styles.downText, { textAlign: 'right' }]}>
-                                ${positionDownSum.toFixed(2)}
+                                {convert(positionDownSum.toFixed(2))}
                             </Text>
                         </View>
                         <View style={styles.separator} />
@@ -158,7 +159,7 @@ class OverviewScreen extends Component {
                                 {positionUpCount + positionDownCount}
                             </Text>
                             <Text style={[positionSumStyle, { textAlign: 'right' }]}>
-                                ${positionSum}
+                                {convert(positionSum)}
                             </Text>
                         </View>
                     </View>
