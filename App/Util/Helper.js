@@ -1,5 +1,6 @@
 import moment from 'moment-timezone'
 import _ from 'lodash'
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 export const capitalize = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -36,4 +37,11 @@ export const convert = (value, percent = false) => {
         } else
             return `${value}%`
     }
+}
+
+export const showAlertMessage = (message, type) => {
+    showMessage({
+        message,
+        type,
+    })
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {
     View,
-    Text
+    Text,
+    ScrollView
 } from 'react-native'
 import { connect } from 'react-redux'
 
@@ -140,9 +141,11 @@ class TradeScreen extends Component {
                         {orderResult.limit_price ? orderResult.limit_price : '-'}
                     </Text>
                 </View>
-                <Text>
-                    {JSON.stringify(orderResult, undefined, 4)}
-                </Text>
+                <ScrollView style={styles.jsonData}>
+                    <Text>
+                        {JSON.stringify(orderResult, undefined, 4)}
+                    </Text>
+                </ScrollView>
                 <Button
                     style={styles.button}
                     label="Submitted!"
@@ -213,12 +216,18 @@ const styles = {
         bottom: 0,
         left: 0,
         right: 0,
-        marginBottom: 25
     },
     value: {
         ...Fonts.style.h3,
         fontSize: 19,
         color: Colors.COLOR_GOLD
+    },
+    jsonData: {
+        flex: 1,
+        marginTop: 20,
+        marginBottom: 60,
+        paddingLeft: 5,
+        backgroundColor: 'rgb(207, 207, 207)'
     }
 }
 

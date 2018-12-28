@@ -14,6 +14,7 @@
     "react-native": "0.54.3",
     "react-native-animated-ellipsis": "1.1.0",
     "react-native-elements": "^0.19.1",
+    "react-native-flash-message": "^0.1.10",
     "react-native-gesture-handler": "^1.0.12",
     "react-native-spinkit": "^1.1.1",
     "react-native-tab-navigator": "^0.3.4",

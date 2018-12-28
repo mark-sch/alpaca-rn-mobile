@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import { View } from 'react-native'
 import { Provider } from 'react-redux'
 import { createAppContainer } from "react-navigation";
+import FlashMessage from "react-native-flash-message";
 
 import AppNavigator from './AppNavigator'
 import createStore from '../Redux'
@@ -13,7 +15,10 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <AppContainer />
+                <View style={{ flex: 1 }}>
+                    <AppContainer />
+                    <FlashMessage position="top" />
+                </View>
             </Provider>
         )
     }
