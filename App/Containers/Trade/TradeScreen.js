@@ -62,8 +62,8 @@ class TradeScreen extends Component {
         const updatedValue = {
             ...value,
             type: "market",
-            time_in_force: "day",
-            side: "buy"
+            time_in_force: "gtc",
+            side: "sell"
         }
         postOrder(updatedValue)
     }

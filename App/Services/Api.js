@@ -18,13 +18,17 @@ const create = (baseURL = config.BASE_URL) => {
     const cancelOrder = order_id => api.delete(`v1/orders/${order_id}`)
     const postOrder = data => api.post('v1/orders', data)
     const getPositions = () => api.get('v1/positions')
+    const getAssets = () => api.get('v1/assets?status=active')
+    const getBars = params => api.get(`v1/bars/${params}`)
 
     return {
         getAccount,
         getOrders,
         getPositions,
         cancelOrder,
-        postOrder
+        postOrder,
+        getAssets,
+        getBars
     }
 }
 

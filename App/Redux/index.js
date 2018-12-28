@@ -7,7 +7,8 @@ export default () => {
     const rootReducer = combineReducers({
         orders: require('./OrdersRedux').reducer,
         positions: require('./PositionsRedux').reducer,
-        account: require('./AccountRedux').reducer
+        account: require('./AccountRedux').reducer,
+        assets: require('./AssetsRedux').reducer
     })
 
     return configureStore(rootReducer, rootSaga)

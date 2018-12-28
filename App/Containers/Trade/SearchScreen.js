@@ -36,25 +36,11 @@ class SearchScreen extends Component {
         }
     }
 
-    componentDidMount() {
-        let { orders, positions } = this.props
-
-        orders = orders.map(item => {
-            const updatedItem = {
-                ...item,
-                asset_id: item.id
-            }
-            return updatedItem
-        })
-        const totalItems = positions.concat(orders)
-        this.setState({ totalItems })
-    }
-
     filterItems = (query) => {
-        const { totalItems } = this.state
+        const { assets } = this.props
 
-        let filteredItems = _.map(totalItems, function(el) {
-            if (query && el.symbol.includes(query)) return el
+        let filteredItems = _.map(assets, function(el) {
+            if (query && el.symbol.toLowerCase().startsWith(query.toLowerCase())) return el
         })
         filteredItems = _.without(filteredItems, undefined)
 
@@ -86,7 +72,7 @@ class SearchScreen extends Component {
                 <FlatList
                     style={styles.list}
                     data={filteredItems}
-                    keyExtractor={item => item.asset_id}
+                    keyExtractor={item => item.id}
                     renderItem={({ item }) => {
                         return (
                             <SearchItem
@@ -129,7 +115,8 @@ const styles = {
 const mapStateToProps = (state) => {
     return {
         orders: state.orders.orders,
-        positions: state.positions.positions
+        positions: state.positions.positions,
+        assets: state.assets.assets
     }
 }
 

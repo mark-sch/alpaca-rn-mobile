@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import AccountActions from '../../Redux/AccountRedux'
 import OrdersActions from '../../Redux/OrdersRedux'
 import PositionsActions from '../../Redux/PositionsRedux'
+import AssetsActions from '../../Redux/AssetsRedux'
 import {
     ApplicationStyles,
     Images,
@@ -34,7 +35,9 @@ class OverviewScreen extends Component {
     }
 
     componentDidMount() {
-        const { getAccount, getOrders, getPositions } = this.props
+        const { getAssets, getBars, getAccount, getOrders, getPositions } = this.props
+        getAssets()
+        getBars('1D/')
         getAccount()
         getOrders()
         getPositions()
@@ -260,7 +263,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getAccount: () => dispatch(AccountActions.getAccountAttempt()),
         getOrders: () => dispatch(OrdersActions.getOrdersAttempt()),
-        getPositions: () => dispatch(PositionsActions.getPositionsAttempt())
+        getPositions: () => dispatch(PositionsActions.getPositionsAttempt()),
+        getAssets: () => dispatch(AssetsActions.getAssetsAttempt()),
+        getBars: params => dispatch(AssetsActions.getBarsAttempt(params))
     }
 }
 

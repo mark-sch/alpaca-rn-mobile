@@ -42,8 +42,8 @@ class EmergencyScreen extends Component {
             const updatedItem = {
                 ...item,
                 type: "market",
-                time_in_force: "day",
-                side: "buy"
+                time_in_force: "gtc",
+                side: "sell"
             }
             postOrder(updatedItem)
         })

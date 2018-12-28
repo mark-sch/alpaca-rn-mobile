@@ -8,7 +8,8 @@ export function* getAccountAttempt(api, action) {
         if (response.ok) {
             yield put(AccountActions.getAccountSuccess(response.data))
         } else {
-            yield put(AccountActions.getAccountFailure('Connection problems :('))
+            const message = response.data.message || 'Something went wrong'
+            yield put(AccountActions.getAccountFailure(message))
         }
     } catch (error) {
         yield put(AccountActions.getAccountFailure(error.message))

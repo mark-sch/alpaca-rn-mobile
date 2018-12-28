@@ -5,6 +5,7 @@ import API from '../Services/Api'
 import { AccountTypes } from '../Redux/AccountRedux'
 import { OrdersTypes } from '../Redux/OrdersRedux'
 import { PositionsTypes } from '../Redux/PositionsRedux'
+import { AssetsTypes } from '../Redux/AssetsRedux'
 
 /* ------------- Sagas ------------- */
 import { getAccountAttempt } from './AccountSagas'
@@ -14,6 +15,10 @@ import {
     postOrderAttempt
 } from './OrdersSagas'
 import { getPositionsAttempt } from './PositionsSagas'
+import {
+    getAssetsAttempt,
+    getBarsAttempt
+} from './AssetsSagas'
 
 /* ------------- API ------------- */
 const api = API.create()
@@ -26,5 +31,7 @@ export default function* root() {
         takeLatest(OrdersTypes.CANCEL_ORDER_ATTEMPT, cancelOrderAttempt, api),
         takeLatest(OrdersTypes.POST_ORDER_ATTEMPT, postOrderAttempt, api),
         takeLatest(PositionsTypes.GET_POSITIONS_ATTEMPT, getPositionsAttempt, api),
+        takeLatest(AssetsTypes.GET_ASSETS_ATTEMPT, getAssetsAttempt, api),
+        takeLatest(AssetsTypes.GET_BARS_ATTEMPT, getBarsAttempt, api),
     ]
 }

@@ -8,7 +8,8 @@ export function* getPositionsAttempt(api, action) {
         if (response.ok) {
             yield put(PositionsActions.getPositionsSuccess(response.data))
         } else {
-            yield put(PositionsActions.getPositionsFailure('Connection problems :('))
+            const message = response.data.message || 'Something went wrong'
+            yield put(PositionsActions.getPositionsFailure(message))
         }
     } catch (error) {
         yield put(PositionsActions.getPositionsFailure(error.message))
