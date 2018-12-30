@@ -5,7 +5,7 @@ const { Types, Creators } = createActions({
     getAssetsAttempt: null,
     getAssetsSuccess: ['data'],
     getAssetsFailure: ['error'],
-    getBarsAttempt: ['params'],
+    getBarsAttempt: ['timeframe', 'symbols'],
     getBarsSuccess: ['data'],
     getBarsFailure: ['error']
 })
