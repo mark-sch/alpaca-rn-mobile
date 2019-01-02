@@ -35,9 +35,8 @@ class OverviewScreen extends Component {
     }
 
     componentDidMount() {
-        const { getAssets, getBars, getAccount, getOrders, getPositions } = this.props
+        const { getAssets, getAccount, getOrders, getPositions } = this.props
         getAssets()
-        getBars('1D', 'AA')
         getAccount()
         getOrders()
         getPositions()
@@ -265,7 +264,6 @@ const mapDispatchToProps = (dispatch) => {
         getOrders: () => dispatch(OrdersActions.getOrdersAttempt()),
         getPositions: () => dispatch(PositionsActions.getPositionsAttempt()),
         getAssets: () => dispatch(AssetsActions.getAssetsAttempt()),
-        getBars: (timeframe, symbols) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols))
     }
 }
 

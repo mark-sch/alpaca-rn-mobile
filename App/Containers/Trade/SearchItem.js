@@ -5,7 +5,9 @@ import {
     TouchableOpacity
 } from 'react-native'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
+import AssetsActions from '../../Redux/AssetsRedux'
 import {
     ApplicationStyles,
     Colors,
@@ -16,30 +18,31 @@ import { convert } from '../../Util/Helper';
 class SearchItem extends Component {
 
     render() {
-        const { position, symbolStyle, onPress } = this.props
+        const { position, symbolStyle, onPress, bars } = this.props
         const plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
         const percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
 
         return (
             <TouchableOpacity
                 activeOpacity={0.9}
-                style={styles.rowContainer}
                 onPress={onPress}
             >
-                <View style={{ alignSelf: 'center' }}>
-                    <Text style={[styles.h2, symbolStyle]}>
-                        {position.symbol}
-                    </Text>
+                <View style={styles.rowContainer}>
+                    <View style={{ alignSelf: 'center' }}>
+                        <Text style={[styles.h2, symbolStyle]}>
+                            {position.symbol}
+                        </Text>
+                    </View>
+                    <View style={styles.valueContainer}>
+                        <Text style={styles.h3}>
+                            {convert(position.unrealized_intraday_pl)}
+                        </Text>
+                        <Text style={plStyle}>
+                            {convert(percentValue, true)}
+                        </Text>
+                    </View>
+                    <View style={styles.separator} />
                 </View>
-                <View style={styles.valueContainer}>
-                    <Text style={styles.h3}>
-                        {convert(position.unrealized_intraday_pl)}
-                    </Text>
-                    <Text style={plStyle}>
-                        {convert(percentValue, true)}
-                    </Text>
-                </View>
-                <View style={styles.separator} />
             </TouchableOpacity>
         )
     }
@@ -71,13 +74,26 @@ const styles = {
     },
     rowContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        height: 50,
         marginBottom: 10,
     },
     valueContainer: {
-        alignItems: 'flex-end',
-        backgroundColor: 'pink'
+        position: 'absolute',
+        right: 0,
+        top: 0,
     }
 }
 
-export default SearchItem
+const mapStateToProps = (state) => {
+    return {
+        bars: state.assets.bars,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getBars: (timeframe, symbols) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchItem)

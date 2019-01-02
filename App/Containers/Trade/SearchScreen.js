@@ -14,8 +14,6 @@ import {
 } from '../../Themes'
 import SearchItem from './SearchItem'
 import NavigationIcon from '../../Components/NavigationIcon'
-import OrderItem from '../Order/OrderItem';
-import PositionItem from '../Position/PositionItem';
 
 class SearchScreen extends Component {
 
@@ -78,7 +76,7 @@ class SearchScreen extends Component {
                             <SearchItem
                                 position={item}
                                 onPress={() =>
-                                    this.props.navigation.navigate('Trade', {
+                                    this.props.navigation.navigate('Symbol', {
                                         value: item
                                     })
                                 }
