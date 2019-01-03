@@ -1,4 +1,4 @@
-import { takeLatest } from 'redux-saga/effects'
+import { takeLatest, takeEvery } from 'redux-saga/effects'
 import API from '../Services/Api'
 
 /* ------------- Types ------------- */
@@ -32,6 +32,6 @@ export default function* root() {
         takeLatest(OrdersTypes.POST_ORDER_ATTEMPT, postOrderAttempt, api),
         takeLatest(PositionsTypes.GET_POSITIONS_ATTEMPT, getPositionsAttempt, api),
         takeLatest(AssetsTypes.GET_ASSETS_ATTEMPT, getAssetsAttempt, api),
-        takeLatest(AssetsTypes.GET_BARS_ATTEMPT, getBarsAttempt, api),
+        takeEvery(AssetsTypes.GET_BARS_ATTEMPT, getBarsAttempt, api),
     ]
 }

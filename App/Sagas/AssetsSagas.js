@@ -17,12 +17,12 @@ export function* getAssetsAttempt(api, action) {
 }
 
 export function* getBarsAttempt(api, action) {
-    const { timeframe, symbols } = action
+    const { timeframe, symbols, day } = action
     try {
         const response = yield call(api.getBars, timeframe, symbols)
-        console.log("get bars response", response)
+        console.log(day, ":get bars response", response)
         if (response.ok) {
-            yield put(AssetsActions.getBarsSuccess(response.data))
+            yield put(AssetsActions.getBarsSuccess(response.data, day))
         } else {
             const message = response.data.message || 'Something went wrong'
             yield put(AssetsActions.getBarsFailure(message))

@@ -18,38 +18,50 @@ import { convert } from '../../Util/Helper';
 class SearchItem extends Component {
 
     render() {
-        const { position, symbolStyle, onPress, bars } = this.props
-        const plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
-        const percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
+        const { item, symbolStyle, onPress, bars, preBars } = this.props
+        let currentStockPrice = 0, preClosePrice = 0
+        let priceDif = 0, percentage = 0
+        let plStyle = styles.upText
+        try {
+            if (bars && preBars) {
+                currentStockPrice = bars[item.symbol][0].o
+                preClosePrice = preBars[item.symbol][0].c
+                priceDif = preClosePrice - currentStockPrice
+                percentage = convert((priceDif/preClosePrice*100).toFixed(2), true)
+                plStyle = priceDif > 0 ? styles.upText : styles.downText
+            }
 
-        return (
-            <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={onPress}
-            >
-                <View style={styles.rowContainer}>
-                    <View style={{ alignSelf: 'center' }}>
-                        <Text style={[styles.h2, symbolStyle]}>
-                            {position.symbol}
-                        </Text>
+            return (
+                <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={onPress}
+                >
+                    <View style={styles.rowContainer}>
+                        <View style={{ alignSelf: 'center' }}>
+                            <Text style={[styles.h2, symbolStyle]}>
+                                {item.symbol}
+                            </Text>
+                        </View>
+                        <View style={styles.valueContainer}>
+                            <Text style={styles.h3}>
+                                {convert(currentStockPrice.toFixed(2))}
+                            </Text>
+                            <Text style={plStyle}>
+                                {`${convert(priceDif.toFixed(2))} (${percentage})`}
+                            </Text>
+                        </View>
+                        <View style={styles.separator} />
                     </View>
-                    <View style={styles.valueContainer}>
-                        <Text style={styles.h3}>
-                            {convert(position.unrealized_intraday_pl)}
-                        </Text>
-                        <Text style={plStyle}>
-                            {convert(percentValue, true)}
-                        </Text>
-                    </View>
-                    <View style={styles.separator} />
-                </View>
-            </TouchableOpacity>
-        )
+                </TouchableOpacity>
+            )
+        } catch(e) {
+            return null
+        }
     }
 }
 
 SearchItem.propTypes = {
-    position: PropTypes.object.isRequired,
+    item: PropTypes.object.isRequired,
     symbolStyle: PropTypes.object,
     onPress: PropTypes.func
 }
@@ -84,11 +96,8 @@ const styles = {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        bars: state.assets.bars,
-    }
-}
+const mapStateToProps = (state) => ({
+})
 
 const mapDispatchToProps = (dispatch) => {
     return {

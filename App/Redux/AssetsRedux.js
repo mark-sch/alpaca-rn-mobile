@@ -5,9 +5,10 @@ const { Types, Creators } = createActions({
     getAssetsAttempt: null,
     getAssetsSuccess: ['data'],
     getAssetsFailure: ['error'],
-    getBarsAttempt: ['timeframe', 'symbols'],
-    getBarsSuccess: ['data'],
-    getBarsFailure: ['error']
+    getBarsAttempt: ['timeframe', 'symbols', 'day'],
+    getBarsSuccess: ['data', 'day'],
+    getBarsFailure: ['error'],
+    resetBars: null
 })
 
 export const AssetsTypes = Types
@@ -15,7 +16,8 @@ export default Creators
 
 export const INITIAL_STATE = Immutable({
     assets: [],
-    bars: [],
+    bars: null,
+    preBars: null,
     fetching: true,
     errorMessage: '',
     error: false
@@ -38,12 +40,20 @@ export const getBarsAttempt = (state, action) => {
 }
 
 export const getBarsSuccess = (state, action) => {
-    return state.merge({ fetching: false, error: false, errorMessage: '', bars: action.data })
+    if (action.day === 'today') {
+        return state.merge({ fetching: false, error: false, errorMessage: '', bars: action.data })
+    } else {
+        return state.merge({ fetching: false, error: false, errorMessage: '', preBars: action.data })
+    }
 }
 
 export const getBarsFailure = (state, action) => {
     return state.merge({ fetching: false, error: true, errorMessage: action.error })
 }
+
+export const resetBars = (state, action) => (
+    state.merge({ bars: null, preBars: null })
+)
 
 export const reducer = createReducer(INITIAL_STATE, {
     [Types.GET_ASSETS_ATTEMPT]: getAssetsAttempt,

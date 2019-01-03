@@ -12,7 +12,7 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
-import OrdersActions from '../../Redux/OrdersRedux'
+import AssetsActions from '../../Redux/AssetsRedux'
 import { 
     convert,
     capitalize
@@ -20,7 +20,6 @@ import {
 import NavigationIcon from '../../Components/NavigationIcon'
 import Button from '../../Components/Button'
 import OrderItem from '../Order/OrderItem';
-import PositionItem from '../Position/PositionItem';
 import SearchItem from './SearchItem';
 
 class SymbolScreen extends Component {
@@ -43,8 +42,10 @@ class SymbolScreen extends Component {
     }
 
     componentDidMount() {
-        const { navigation } = this.props
+        const { navigation, getBars } = this.props
         const value = navigation.getParam('value')
+        getBars('1Min', value.symbol, 'today')
+        getBars('1D', value.symbol, 'yesterday')
     }
 
     renderValueDetail = (value) => {
@@ -88,13 +89,15 @@ class SymbolScreen extends Component {
     }
 
     render() {
-        const { navigation } = this.props
+        const { navigation, bars, preBars } = this.props
         const value = navigation.getParam('value')
 
         return (
             <View style={styles.mainContainer}>
                 <SearchItem
-                    position={value}
+                    bars={bars}
+                    preBars={preBars}
+                    item={value}
                     symbolStyle={styles.symbol}
                 />
                 {this.renderValueDetail(value)}
@@ -145,17 +148,16 @@ const styles = {
         left: 0,
         right: 0,
     },
-    value: {
-        ...Fonts.style.h3,
-        fontSize: 19,
-        color: Colors.COLOR_GOLD
-    },
 }
 
 const mapStateToProps = (state) => ({
+    bars: state.assets.bars,
+    preBars: state.assets.preBars,
 })
 
 const mapDispatchToProps = (dispatch) => ({
+    getBars: (timeframe, symbols, day) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols, day)),
+    resetBars: () => dispatch(AssetsActions.resetBars()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SymbolScreen)

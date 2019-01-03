@@ -15,6 +15,10 @@ const create = (baseURL = config.BASE_URL) => {
 
     const dataApi = apisauce.create({
         baseURL: config.DATA_BASE_URL,
+        headers: {
+			'APCA-API-KEY-ID': config.APCA_API_KEY_ID,
+			'APCA-API-SECRET-KEY': config.APCA_API_SECRET_KEY,
+		},
         timeout: 15000
     })
 

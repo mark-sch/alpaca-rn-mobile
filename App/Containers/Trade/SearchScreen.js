@@ -74,7 +74,7 @@ class SearchScreen extends Component {
                     renderItem={({ item }) => {
                         return (
                             <SearchItem
-                                position={item}
+                                item={item}
                                 onPress={() =>
                                     this.props.navigation.navigate('Symbol', {
                                         value: item
