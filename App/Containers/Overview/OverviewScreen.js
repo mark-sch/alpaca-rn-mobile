@@ -36,9 +36,16 @@ class OverviewScreen extends Component {
 
     componentDidMount() {
         const { getAssets, getAccount, getOrders, getPositions } = this.props
+
+        var start = new Date();
+        start.setHours(0,0,0,0);
+
+        var end = new Date();
+        end.setHours(23,59,59,999);
+
         getAssets()
         getAccount()
-        getOrders()
+        getOrders(`?status=all&after=${start.toISOString()}&until=${end.toISOString()}`)
         getPositions()
     }
 
@@ -261,7 +268,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getAccount: () => dispatch(AccountActions.getAccountAttempt()),
-        getOrders: () => dispatch(OrdersActions.getOrdersAttempt()),
+        getOrders: (params) => dispatch(OrdersActions.getOrdersAttempt(params)),
         getPositions: () => dispatch(PositionsActions.getPositionsAttempt()),
         getAssets: () => dispatch(AssetsActions.getAssetsAttempt()),
     }

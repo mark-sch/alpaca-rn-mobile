@@ -18,13 +18,6 @@ import OrderItem from './OrderItem';
 
 class OrdersScreen extends Component {
 
-    componentDidMount() {
-        console.log('orders did mount')
-    }
-
-    componentWillReceiveProps(nextProps) {
-    }
-
     render() {
         const { orders } = this.props
         console.log('orders get:', orders)

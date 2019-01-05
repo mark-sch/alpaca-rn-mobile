@@ -3,7 +3,7 @@ import Immutable from 'seamless-immutable'
 
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
-    getOrdersAttempt: null,
+    getOrdersAttempt: ['params'],
     getOrdersSuccess: ['data'],
     getOrdersFailure: ['error'],
     cancelOrderAttempt: ['order_id'],

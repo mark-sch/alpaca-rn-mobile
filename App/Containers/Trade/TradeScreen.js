@@ -267,7 +267,7 @@ const styles = {
     },
     jsonData: {
         flex: 1,
-        marginTop: 20,
+        marginTop: 10,
         marginBottom: 60,
         paddingLeft: 5,
         backgroundColor: 'rgb(207, 207, 207)'

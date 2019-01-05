@@ -13,13 +13,6 @@ import PositionItem from './PositionItem'
 
 class PositionScreen extends Component {
 
-    componentDidMount() {
-        console.log('positions did mount')
-    }
-
-    componentWillReceiveProps(nextProps) {
-    }
-
     render() {
         const { positions } = this.props
         console.log('positions get:', positions)

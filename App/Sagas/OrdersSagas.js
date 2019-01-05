@@ -3,8 +3,9 @@ import OrdersActions from '../Redux/OrdersRedux'
 import { showAlertMessage } from '../Util/Helper'
 
 export function* getOrdersAttempt(api, action) {
+    const { params } = action
     try {
-        const response = yield call(api.getOrders)
+        const response = yield call(api.getOrders, params)
         console.log("get orders response", response)
         if (response.ok) {
             yield put(OrdersActions.getOrdersSuccess(response.data))

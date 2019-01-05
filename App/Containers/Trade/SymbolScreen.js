@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    ScrollView
+    FlatList
 } from 'react-native'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import {
     ApplicationStyles,
@@ -49,9 +50,22 @@ class SymbolScreen extends Component {
     }
 
     renderValueDetail = (value) => {
-        const mainValue = `${value.qty}@${value.avg_entry_price}`
-        const plStyle = value.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
-        const percentValue = (value.unrealized_intraday_plpc * 100).toFixed(2)
+        const { positions, orders } = this.props
+        let mainValue, percentValue
+        let plStyle
+
+        positions.map(position => {
+            if (position.symbol === value.symbol) {
+                mainValue = `${position.qty}@${position.avg_entry_price}`
+                plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
+                percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
+            }
+        })
+
+        let filteredOrders = _.map(orders, function(el) {
+            if (el.symbol === value.symbol) return el
+        })
+        filteredOrders = _.without(filteredOrders, undefined)
 
         return (
             <View style={styles.container}>
@@ -59,19 +73,32 @@ class SymbolScreen extends Component {
                     <Text style={styles.label}>
                         Positions
                     </Text>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.h3}>
-                            {mainValue}
-                        </Text>
-                        <Text style={plStyle}>
-                            {convert(percentValue, true)}
-                        </Text>
-                    </View>
+                    {mainValue && (
+                        <View style={styles.rowContainer}>
+                            <Text style={styles.h3}>
+                                {mainValue}
+                            </Text>
+                            <Text style={plStyle}>
+                                {convert(percentValue, true)}
+                            </Text>
+                        </View>
+                    )}
                 </View>
                 <Text style={styles.label}>
                     Orders
                 </Text>
-                {/* <OrderItem order={value} /> */}
+                {filteredOrders && (
+                    <FlatList
+                        style={styles.list}
+                        data={filteredOrders}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <OrderItem order={item} />
+                            )
+                        }}
+                    />
+                )}
                 <Button
                     style={styles.button}
                     label="Trade"
@@ -148,11 +175,17 @@ const styles = {
         left: 0,
         right: 0,
     },
+    list: {
+        flex: 1,
+        marginTop: 10,
+    }
 }
 
 const mapStateToProps = (state) => ({
     bars: state.assets.bars,
     preBars: state.assets.preBars,
+    positions: state.positions.positions,
+    orders: state.orders.orders,
 })
 
 const mapDispatchToProps = (dispatch) => ({
