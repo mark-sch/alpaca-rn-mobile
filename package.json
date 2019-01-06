@@ -16,6 +16,7 @@
     "react-native-elements": "^0.19.1",
     "react-native-flash-message": "^0.1.10",
     "react-native-gesture-handler": "^1.0.12",
+    "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-picker-select": "^5.2.0",
     "react-native-spinkit": "^1.1.1",
     "react-native-tab-navigator": "^0.3.4",
