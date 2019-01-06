@@ -6,6 +6,7 @@ import {
     ScrollView
 } from 'react-native'
 import { connect } from 'react-redux'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import {
     ApplicationStyles,
@@ -14,10 +15,6 @@ import {
     Fonts
 } from '../../Themes'
 import OrdersActions from '../../Redux/OrdersRedux'
-import { 
-    convert,
-    capitalize
-} from '../../Util/Helper';
 import NavigationIcon from '../../Components/NavigationIcon'
 import Button from '../../Components/Button'
 import SearchItem from './SearchItem';
@@ -120,75 +117,85 @@ class TradeScreen extends Component {
             shares, limitPrice, stopPrice,
             sideItems, typeItems, timeInForceItems
         } = this.state
+        let stopPriceEditable = true
+        let limitPriceEditable = true
 
         let disabledSubmitBtn = !type
         if (type === 'market') {
             disabledSubmitBtn = !side || !timeInForce || !shares
+            stopPriceEditable = false
+            limitPriceEditable = false
         } else if (type === 'limit') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !limitPrice
+            stopPriceEditable = false
         } else if (type === 'stop') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !stopPrice
+            limitPriceEditable = false
         } else if (type === 'stop_limit') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !stopPrice || !limitPrice
         }
 
         return (
             <View style={styles.container}>
-                <TradeItem
-                    label='Side'
-                    items={sideItems}
-                    onValueChange={value => this.setState({ side: value })}
-                />
-                <View style={styles.rowContainer}>
-                    <Text style={styles.label}>
-                        Shares
-                    </Text>
-                    <TextInput
-                        style={styles.inputText}
-                        onChangeText={(text) => this.setState({ shares: text })}
-                        value={shares}
-                        maxLength={20}
+                <KeyboardAwareScrollView>
+                    <TradeItem
+                        label='Side'
+                        items={sideItems}
+                        onValueChange={value => this.setState({ side: value })}
                     />
-                </View>
-                <TradeItem
-                    label='Type'
-                    items={typeItems}
-                    onValueChange={value => this.setState({ type: value })}
-                />
-                <TradeItem
-                    label='Time in Force'
-                    items={timeInForceItems}
-                    onValueChange={value => this.setState({ timeInForce: value })}
-                />
-                <View style={styles.rowContainer}>
-                    <Text style={styles.label}>
-                        Limit Price
-                    </Text>
-                    <TextInput
-                        style={styles.inputText}
-                        onChangeText={(text) => this.setState({ limitPrice: text })}
-                        value={limitPrice}
-                        maxLength={20}
-                    />
-                </View>
-                <View style={styles.rowContainer}>
-                    <Text style={styles.label}>
-                        Stop Price
-                    </Text>
-                    <TextInput
-                        style={styles.inputText}
-                        onChangeText={(text) => this.setState({ stopPrice: text })}
-                        value={stopPrice}
-                        maxLength={20}
-                    />
-                </View>
-                {this.state.submitted && (
-                    <ScrollView style={styles.jsonData}>
-                        <Text>
-                            {JSON.stringify(orderResult, undefined, 4)}
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.label}>
+                            Shares
                         </Text>
-                    </ScrollView>
-                )}
+                        <TextInput
+                            style={styles.inputText}
+                            onChangeText={(text) => this.setState({ shares: text })}
+                            value={shares}
+                            maxLength={20}
+                        />
+                    </View>
+                    <TradeItem
+                        label='Type'
+                        items={typeItems}
+                        onValueChange={value => this.setState({ type: value })}
+                    />
+                    <TradeItem
+                        label='Time in Force'
+                        items={timeInForceItems}
+                        onValueChange={value => this.setState({ timeInForce: value })}
+                    />
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.label}>
+                            Limit Price
+                        </Text>
+                        <TextInput
+                            style={styles.inputText}
+                            onChangeText={(text) => this.setState({ limitPrice: text })}
+                            value={limitPrice}
+                            editable={limitPriceEditable}
+                            maxLength={20}
+                        />
+                    </View>
+                    <View style={styles.rowContainer}>
+                        <Text style={styles.label}>
+                            Stop Price
+                        </Text>
+                        <TextInput
+                            style={styles.inputText}
+                            onChangeText={(text) => this.setState({ stopPrice: text })}
+                            value={stopPrice}
+                            editable={stopPriceEditable}
+                            maxLength={20}
+                        />
+                    </View>
+                    {this.state.submitted && (
+                        <ScrollView style={styles.jsonData}>
+                            <Text>
+                                {JSON.stringify(orderResult, undefined, 4)}
+                            </Text>
+                        </ScrollView>
+                    )}
+                </KeyboardAwareScrollView>
                 {this.state.submitted ?
                     <Button
                         style={styles.button}

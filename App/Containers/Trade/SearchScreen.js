@@ -106,7 +106,8 @@ const styles = {
     },
     list: {
         flex: 1,
-        marginTop: 30
+        marginTop: 30,
+        paddingRight: 10
     }
 }
 

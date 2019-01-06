@@ -37,7 +37,7 @@ export function* cancelOrderAttempt(api, action) {
 
 export function* postOrderAttempt(api, action) {
     const { data } = action
-    console.log("post orders data", data)
+    // console.log("post orders data", data)
     try {
         const response = yield call(api.postOrder, data)
         console.log("post orders response", response)
