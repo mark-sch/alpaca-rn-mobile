@@ -17,7 +17,7 @@ class PositionItem extends Component {
     render() {
         const { position } = this.props
         // console.log('position item:', position)
-        const mainValue = `${position.qty}@${position.avg_entry_price}`
+        const mainValue = `${position.qty}@${parseFloat(position.avg_entry_price).toFixed(2)}`
         const plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
         const percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
 
