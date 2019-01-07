@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 
 import OrdersActions from '../../Redux/OrdersRedux'
+import AccountActions from '../../Redux/AccountRedux'
 import {
     ApplicationStyles,
     Images,
@@ -49,13 +50,21 @@ class EmergencyScreen extends Component {
         })
     }
 
+    suspendTrade = (configureAccount) => {
+        let params = {
+            "suspend_trade": true
+        }
+        configureAccount(params)
+    }
+
     render() {
         const {
             orders,
             positions,
-            suspendAPI,
+            configureAccount,
             cancelingOrder,
-            postingOrder
+            postingOrder,
+            fetching
         } = this.props
 
         return (
@@ -68,8 +77,8 @@ class EmergencyScreen extends Component {
                     <Button
                         style={styles.button}
                         label="SUSPEND API"
-						isLoading={false}
-						// onPress={() => suspendAPI()}
+						isLoading={fetching}
+						onPress={() => this.suspendTrade(configureAccount)}
 					/>
                     <Text style={styles.label}>Open Positions: {positions.length}</Text>
                     <Button
@@ -111,8 +120,9 @@ const mapStateToProps = (state) => {
     return {
         cancelingOrder: state.orders.cancelingOrder,
         postingOrder: state.orders.postingOrder,
+        fetching: state.account.fetching,
         orders: state.orders.orders,
-        positions: state.positions.positions 
+        positions: state.positions.positions
     }
 }
 
@@ -120,6 +130,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         cancelOrder: order_id => dispatch(OrdersActions.cancelOrderAttempt(order_id)),
         postOrder: data => dispatch(OrdersActions.postOrderAttempt(data)),
+        configureAccount: data => dispatch(AccountActions.configureAccountAttempt(data))
     }
 }
 
