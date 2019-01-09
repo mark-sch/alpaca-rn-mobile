@@ -151,6 +151,7 @@ class TradeScreen extends Component {
                             style={styles.inputText}
                             onChangeText={(text) => this.setState({ shares: text })}
                             value={shares}
+                            autoCorrect={false}
                             maxLength={20}
                         />
                     </View>
@@ -172,6 +173,7 @@ class TradeScreen extends Component {
                             style={styles.inputText}
                             onChangeText={(text) => this.setState({ limitPrice: text })}
                             value={limitPrice}
+                            autoCorrect={false}
                             editable={limitPriceEditable}
                             maxLength={20}
                         />
@@ -184,6 +186,7 @@ class TradeScreen extends Component {
                             style={styles.inputText}
                             onChangeText={(text) => this.setState({ stopPrice: text })}
                             value={stopPrice}
+                            autoCorrect={false}
                             editable={stopPriceEditable}
                             maxLength={20}
                         />

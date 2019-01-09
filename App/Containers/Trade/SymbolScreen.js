@@ -56,7 +56,7 @@ class SymbolScreen extends Component {
 
         positions.map(position => {
             if (position.symbol === value.symbol) {
-                mainValue = `${position.qty}@${position.avg_entry_price}`
+                mainValue = `${position.qty}@${parseFloat(position.avg_entry_price).toFixed(2)}`
                 plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
                 percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
             }
