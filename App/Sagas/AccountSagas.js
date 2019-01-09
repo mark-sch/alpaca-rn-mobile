@@ -26,6 +26,7 @@ export function* configureAccountAttempt(api, action) {
             yield put(AccountActions.configureAccountSuccess(response.data))
         } else {
             const message = response.data.message || 'Something went wrong'
+            showAlertMessage(message, "danger")
             yield put(AccountActions.configureAccountFailure(message))
         }
     } catch (error) {
