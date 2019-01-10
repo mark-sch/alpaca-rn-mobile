@@ -88,7 +88,7 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
-        fetching: state.orders.fetching
+        fetching: state.positions.fetching
     }
 }
 

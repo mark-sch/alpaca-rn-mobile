@@ -3,7 +3,7 @@ import Immutable from 'seamless-immutable'
 
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
-    getPositionsAttempt: null,
+    getPositionsAttempt: ['showLoading'],
     getPositionsSuccess: ['data'],
     getPositionsFailure: ['error']
 })
@@ -22,7 +22,8 @@ export const INITIAL_STATE = Immutable({
 
 /* ------------- Reducers ------------- */
 export const getPositionsAttempt = (state, action) => {
-    return state.merge({ fetching: true, error: false, errorMessage: '' })
+    const { showLoading } = action
+    return state.merge({ fetching: showLoading, error: false, errorMessage: '' })
 }
 
 export const getPositionsSuccess = (state, action) => {

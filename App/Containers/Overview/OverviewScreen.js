@@ -35,6 +35,11 @@ class OverviewScreen extends Component {
     }
 
     componentDidMount() {
+        this.getData()
+        this.timer = setInterval(() => this.getData(false), 10000)
+    }
+
+    async getData(showLoading = true) {
         const { getAssets, getAccount, getOrders, getPositions } = this.props
 
         var start = new Date();
@@ -46,7 +51,7 @@ class OverviewScreen extends Component {
         getAssets()
         getAccount()
         getOrders(`?status=all&after=${start.toISOString()}&until=${end.toISOString()}`)
-        getPositions()
+        getPositions(showLoading)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -269,7 +274,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getAccount: () => dispatch(AccountActions.getAccountAttempt()),
         getOrders: (params) => dispatch(OrdersActions.getOrdersAttempt(params)),
-        getPositions: () => dispatch(PositionsActions.getPositionsAttempt()),
+        getPositions: (showLoading) => dispatch(PositionsActions.getPositionsAttempt(showLoading)),
         getAssets: () => dispatch(AssetsActions.getAssetsAttempt()),
     }
 }
