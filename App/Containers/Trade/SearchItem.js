@@ -101,7 +101,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getBars: (timeframe, symbols) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols))
+        getBars: (timeframe, symbols, day) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols, day)),
     }
 }
 
