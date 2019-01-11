@@ -24,6 +24,8 @@ class TradeScreen extends Component {
 
     state = {
         submitted: false,
+        stopPriceEditable: true,
+        limitPriceEditable: true,
         sideItems: [
             {
                 label: 'Buy',
@@ -76,19 +78,15 @@ class TradeScreen extends Component {
                     source={Images.back}
                 />
             ),
-            headerRight: (
-                <NavigationIcon
-                    onPress={() => props.navigation.navigate('Search')}
-                    source={Images.search}
-                />
-            ),
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.postingOrder && !nextProps.postingOrder) {
+        if (this.props.postingOrder && !nextProps.postingOrder && nextProps.orderResult) {
             this.setState({
                 submitted: true,
+                stopPriceEditable: false,
+                limitPriceEditable: false
             })
         }
     }
@@ -115,22 +113,24 @@ class TradeScreen extends Component {
         const {
             type, side, timeInForce,
             shares, limitPrice, stopPrice,
-            sideItems, typeItems, timeInForceItems
+            sideItems, typeItems, timeInForceItems,
+            stopPriceEditable, limitPriceEditable,
+            submitted
         } = this.state
-        let stopPriceEditable = true
-        let limitPriceEditable = true
+        let _stopPriceEditable = stopPriceEditable
+        let _limitPriceEditable = limitPriceEditable
 
         let disabledSubmitBtn = !type
         if (type === 'market') {
             disabledSubmitBtn = !side || !timeInForce || !shares
-            stopPriceEditable = false
-            limitPriceEditable = false
+            _stopPriceEditable = false
+            _limitPriceEditable = false
         } else if (type === 'limit') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !limitPrice
-            stopPriceEditable = false
+            _stopPriceEditable = false
         } else if (type === 'stop') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !stopPrice
-            limitPriceEditable = false
+            _limitPriceEditable = false
         } else if (type === 'stop_limit') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !stopPrice || !limitPrice
         }
@@ -141,6 +141,7 @@ class TradeScreen extends Component {
                     <TradeItem
                         label='Side'
                         items={sideItems}
+                        disabled={submitted}
                         onValueChange={value => this.setState({ side: value })}
                     />
                     <View style={styles.rowContainer}>
@@ -151,18 +152,22 @@ class TradeScreen extends Component {
                             style={styles.inputText}
                             onChangeText={(text) => this.setState({ shares: text })}
                             value={shares}
+                            keyboardType='number-pad'
                             autoCorrect={false}
+                            editable={!submitted}
                             maxLength={20}
                         />
                     </View>
                     <TradeItem
                         label='Type'
                         items={typeItems}
+                        disabled={submitted}
                         onValueChange={value => this.setState({ type: value })}
                     />
                     <TradeItem
                         label='Time in Force'
                         items={timeInForceItems}
+                        disabled={submitted}
                         onValueChange={value => this.setState({ timeInForce: value })}
                     />
                     <View style={styles.rowContainer}>
@@ -173,8 +178,9 @@ class TradeScreen extends Component {
                             style={styles.inputText}
                             onChangeText={(text) => this.setState({ limitPrice: text })}
                             value={limitPrice}
+                            keyboardType='number-pad'
                             autoCorrect={false}
-                            editable={limitPriceEditable}
+                            editable={_limitPriceEditable}
                             maxLength={20}
                         />
                     </View>
@@ -186,8 +192,9 @@ class TradeScreen extends Component {
                             style={styles.inputText}
                             onChangeText={(text) => this.setState({ stopPrice: text })}
                             value={stopPrice}
+                            keyboardType='number-pad'
                             autoCorrect={false}
-                            editable={stopPriceEditable}
+                            editable={_stopPriceEditable}
                             maxLength={20}
                         />
                     </View>

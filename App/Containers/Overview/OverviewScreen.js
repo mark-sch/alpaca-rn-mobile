@@ -98,6 +98,37 @@ class OverviewScreen extends Component {
         })
     }
 
+    renderEmptyOrder() {
+        return (
+            <View>
+                <View style={styles.ordersRow}>
+                    <Text style={[styles.h3, { color: Colors.COLOR_GREEN }]}>
+                        Filled
+                    </Text>
+                    <Text style={styles.h3}>
+                        0
+                    </Text>
+                </View>
+                <View style={styles.ordersRow}>
+                    <Text style={[styles.h3, { color: Colors.COLOR_DARK_RED }]}>
+                        Cancelled
+                    </Text>
+                    <Text style={styles.h3}>
+                        0
+                    </Text>
+                </View>
+                <View style={styles.ordersRow}>
+                    <Text style={[styles.h3, { color: Colors.COLOR_GOLD }]}>
+                        Pending
+                    </Text>
+                    <Text style={styles.h3}>
+                        0
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
     render() {
         const {
             account,
@@ -127,7 +158,7 @@ class OverviewScreen extends Component {
                         Portfolio Value
                     </Text>
                     <Text style={styles.h1}>
-                        ${account && account.portfolio_value}
+                        ${account && account.portfolio_value && parseFloat(account.portfolio_value).toLocaleString()}
                     </Text>
                     <Text style={[styles.h3, { color: portfolioSumColor }]}>
                         {convert(positionSum)}
@@ -137,7 +168,7 @@ class OverviewScreen extends Component {
                         Buying Power
                     </Text>
                     <Text style={styles.h2}>
-                        ${account && account.buying_power}
+                        ${account && account.buying_power && parseFloat(account.buying_power).toLocaleString()}
                     </Text>
 
                     <View style={styles.section}>
@@ -182,34 +213,37 @@ class OverviewScreen extends Component {
                         <Text style={styles.label}>
                             Orders Today
                         </Text>
-                        <FlatList
-                            style={styles.list}
-                            data={mergeOrders}
-                            keyExtractor={item => item.status}
-                            renderItem={({ item, index }) => {
-                                if (mergeOrders.length - 1 === index) {
-                                    return (
-                                        <View>
-                                            <View style={styles.separator} />
-                                            <Text style={[styles.h3, { alignSelf: 'flex-end' }]}>
-                                                {orders.length}
-                                            </Text>
-                                        </View>
-                                    )
-                                } else {
-                                    return (
-                                        <View style={styles.ordersRow}>
-                                            <Text style={styles.h3}>
-                                                {capitalize(item.status)}
-                                            </Text>
-                                            <Text style={styles.h3}>
-                                                {item.data.length}
-                                            </Text>
-                                        </View>
-                                    )
-                                }
-                            }}
-                        />
+                        {mergeOrders && mergeOrders.length > 0 ?
+                            <FlatList
+                                style={styles.list}
+                                data={mergeOrders}
+                                keyExtractor={item => item.status}
+                                renderItem={({ item, index }) => {
+                                    if (mergeOrders.length - 1 === index) {
+                                        return (
+                                            <View>
+                                                <View style={styles.separator} />
+                                                <Text style={[styles.h3, { alignSelf: 'flex-end' }]}>
+                                                    {orders.length}
+                                                </Text>
+                                            </View>
+                                        )
+                                    } else {
+                                        return (
+                                            <View style={styles.ordersRow}>
+                                                <Text style={styles.h3}>
+                                                    {capitalize(item.status)}
+                                                </Text>
+                                                <Text style={styles.h3}>
+                                                    {item.data.length}
+                                                </Text>
+                                            </View>
+                                        )
+                                    }
+                                }}
+                            /> :
+                            this.renderEmptyOrder()
+                        }
                     </View>
                 </View>
             </View>
@@ -230,10 +264,6 @@ const styles = {
     h3: {
         ...Fonts.style.h3,
         color: Colors.COLOR_CORE_TEXT
-    },
-    label: {
-        ...Fonts.style.h3,
-        color: Colors.COLOR_GRAY
     },
     section: {
         marginTop: 40,

@@ -34,6 +34,10 @@ class SearchScreen extends Component {
         }
     }
 
+    componentDidMount() {
+        this.queryTextInput.focus()
+    }
+
     filterItems = (query) => {
         const { assets } = this.props
 
@@ -55,6 +59,7 @@ class SearchScreen extends Component {
             <View style={styles.mainContainer}>
                 <View style={styles.searchContainer}>
                     <TextInput
+                        ref={ref => this.queryTextInput = ref}
                         style={styles.searchInput}
                         placeholder='Symbol...'
                         onChangeText={(text) => this.filterItems(text)}

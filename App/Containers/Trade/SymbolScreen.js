@@ -33,12 +33,6 @@ class SymbolScreen extends Component {
                     source={Images.back}
                 />
             ),
-            headerRight: (
-                <NavigationIcon
-                    onPress={() => props.navigation.navigate('Search')}
-                    source={Images.search}
-                />
-            ),
         }
     }
 
