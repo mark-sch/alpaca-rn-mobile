@@ -25,7 +25,7 @@ class TradeItem extends Component {
     }
 
     render() {
-        const { label, items, onValueChange } = this.props
+        const { label, items, disabled, onValueChange } = this.props
         return (
             <View style={styles.rowContainer}>
                 <Text style={styles.label}>
@@ -37,6 +37,7 @@ class TradeItem extends Component {
                         value: null,
                         color: Colors.COLOR_GOLD,
                     }}
+                    disabled={disabled}
                     items={items}
                     onValueChange={(value) => {
                         this.setState({
@@ -58,6 +59,7 @@ class TradeItem extends Component {
 TradeItem.propTypes = {
     items: PropTypes.array.isRequired,
     label: PropTypes.string,
+    disabled: PropTypes.bool,
     onValueChange: PropTypes.func
 }
 

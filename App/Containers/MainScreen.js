@@ -22,6 +22,12 @@ class MainScreen extends Component {
 
     static navigationOptions = (props) => {
         return {
+            headerLeft: (
+                <NavigationIcon
+                    onPress={() => props.navigation.pop()}
+                    source={Images.back}
+                />
+            ),
             headerRight: (
                 <NavigationIcon
                     onPress={() => props.navigation.navigate('Search')}
