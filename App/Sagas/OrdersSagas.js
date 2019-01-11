@@ -6,7 +6,6 @@ export function* getOrdersAttempt(api, action) {
     const { params } = action
     try {
         const response = yield call(api.getOrders, params)
-        console.log("get orders response", response)
         if (response.ok) {
             yield put(OrdersActions.getOrdersSuccess(response.data))
         } else {
@@ -22,7 +21,6 @@ export function* cancelOrderAttempt(api, action) {
     const { order_id } = action
     try {
         const response = yield call(api.cancelOrder, order_id)
-        console.log("cancel orders response", response)
         if (response.ok) {
             showAlertMessage("Cancel order success", "success")
             yield put(OrdersActions.cancelOrderSuccess(response.data))
@@ -37,10 +35,8 @@ export function* cancelOrderAttempt(api, action) {
 
 export function* postOrderAttempt(api, action) {
     const { data } = action
-    // console.log("post orders data", data)
     try {
         const response = yield call(api.postOrder, data)
-        console.log("post orders response", response)
         if (response.ok) {
             showAlertMessage("Post order success", "success")
             yield put(OrdersActions.postOrderSuccess(response.data))

@@ -5,7 +5,6 @@ import { showAlertMessage } from '../Util/Helper'
 export function* getAccountAttempt(api, action) {
     try {
         const response = yield call(api.getAccount)
-        console.log("get Account response", response)
         if (response.ok) {
             yield put(AccountActions.getAccountSuccess(response.data))
         } else {
@@ -20,7 +19,6 @@ export function* getAccountAttempt(api, action) {
 export function* configureAccountAttempt(api, action) {
     try {
         const response = yield call(api.configureAccount, action.data)
-        console.log("configure Account response", response)
         if (response.ok) {
             showAlertMessage("Success", "success")
             yield put(AccountActions.configureAccountSuccess(response.data))

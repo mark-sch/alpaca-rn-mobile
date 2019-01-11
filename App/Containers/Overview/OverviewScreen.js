@@ -36,7 +36,7 @@ class OverviewScreen extends Component {
 
     componentDidMount() {
         this.getData()
-        this.timer = setInterval(() => this.getData(false), 10000)
+        this.timer = setInterval(() => this.getData(false), 5000)
     }
 
     async getData(showLoading = true) {
