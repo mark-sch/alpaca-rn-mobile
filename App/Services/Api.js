@@ -22,6 +22,17 @@ const create = (baseURL = config.BASE_URL) => {
         timeout: 15000
     })
 
+    const setBaseURL = url => api.setBaseURL(url)
+    const setHeaders = (apiKey, secretKey) => {
+        api.setHeaders({
+            'APCA-API-KEY-ID': apiKey,
+            'APCA-API-SECRET-KEY': secretKey,
+        })
+        dataApi.setHeaders({
+            'APCA-API-KEY-ID': apiKey,
+            'APCA-API-SECRET-KEY': secretKey,
+        })
+    }
     const getAccount = () => api.get('v1/account')
     const configureAccount = data => api.patch('v1/account/configurations', data)
     const getOrders = params => api.get('v1/orders' + params)
@@ -32,6 +43,8 @@ const create = (baseURL = config.BASE_URL) => {
     const getBars = (timeframe, symbols) => dataApi.get(`v1/bars/${timeframe}?symbols=${symbols}`)
 
     return {
+        setBaseURL,
+        setHeaders,
         getAccount,
         configureAccount,
         getOrders,

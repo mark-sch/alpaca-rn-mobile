@@ -2,12 +2,14 @@ import { takeLatest, takeEvery } from 'redux-saga/effects'
 import API from '../Services/Api'
 
 /* ------------- Types ------------- */
+import { AppTypes } from '../Redux/AppRedux'
 import { AccountTypes } from '../Redux/AccountRedux'
 import { OrdersTypes } from '../Redux/OrdersRedux'
 import { PositionsTypes } from '../Redux/PositionsRedux'
 import { AssetsTypes } from '../Redux/AssetsRedux'
 
 /* ------------- Sagas ------------- */
+import { appStartAttempt } from './AppSaga'
 import {
     getAccountAttempt,
     configureAccountAttempt
@@ -29,6 +31,7 @@ const api = API.create()
 /* ------------- Connect Types To Sagas ------------- */
 export default function* root() {
     yield [
+        takeLatest(AppTypes.APP_START_ATTEMPT, appStartAttempt, api),
         takeLatest(AccountTypes.GET_ACCOUNT_ATTEMPT, getAccountAttempt, api),
         takeLatest(AccountTypes.CONFIGURE_ACCOUNT_ATTEMPT, configureAccountAttempt, api),
         takeLatest(OrdersTypes.GET_ORDERS_ATTEMPT, getOrdersAttempt, api),
