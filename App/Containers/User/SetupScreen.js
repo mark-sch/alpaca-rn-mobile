@@ -13,6 +13,8 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
+import Storage from '../../Util/Storage'
+import Button from '../../Components/Button'
 
 class SetupScreen extends Component {
 
@@ -23,7 +25,7 @@ class SetupScreen extends Component {
         this.state = {
             apiKey: '',
             secretKey: '',
-            selectedValue: '',
+            baseUrl: '',
             baseUrlItems: [
                 {
                     label: 'https://api.alpaca.markets/',
@@ -37,11 +39,48 @@ class SetupScreen extends Component {
         }
     }
 
+    componentDidMount() {
+    }
+
+    getStarted = () => {
+        const { apiKey, secretKey, baseUrl } = this.state
+
+        var data = {
+            apiKey,
+            secretKey,
+            baseUrl,
+        }
+
+        Storage.save({
+            key: 'KEYS',
+            data: data,
+            expires: null
+        })
+
+        Storage
+            .load({key: 'KEYS', autoSync: false})
+            .then((keys) => {
+                let apiKeyArray = keys.apiKeyArray ? keys.apiKeyArray : []
+                apiKeyArray.push(apiKey)
+                Storage.save({
+                    key: 'KEYS',
+                    data: {
+                        apiKeyArray
+                    },
+                    expires: null
+                })
+            })
+            .catch(err => {
+            })
+
+        this.props.navigation.navigate('Main')
+    }
+
     render() {
         const { apiKey, secretKey, baseUrlItems } = this.state
 
         return (
-            <View style={styles.container}>
+            <View style={styles.mainContainer}>
                 <View style={styles.rowContainer}>
                     <Text style={styles.label}>
                         APCA_API_KEY_ID
@@ -79,16 +118,24 @@ class SetupScreen extends Component {
                         items={baseUrlItems}
                         onValueChange={(value) => {
                             this.setState({
-                                selectedValue: value,
+                                baseUrl: value,
                             })
                         }}
                         style={{ ...pickerSelectStyles }}
-                        value={this.state.selectedValue}
+                        value={this.state.baseUrl}
                         ref={(el) => {
                             this.inputRefs.picker = el
                         }}
                     />
                 </View>
+                <Button
+                    style={styles.button}
+                    label="Get Started"
+                    color={Colors.COLOR_NAV_HEADER}
+                    labelColor={Colors.WHITE}
+                    height={50}
+                    onPress={this.getStarted}
+                />
             </View>
         )
     }
@@ -98,20 +145,23 @@ const styles = {
     ...ApplicationStyles.screen,
     rowContainer: {
         flexDirection: 'column',
-        marginTop: 20
+        marginTop: 30
     },
     inputText: {
-        width: 280,
+        width: null,
         height: 40,
         borderBottomColor: Colors.COLOR_GOLD,
         borderBottomWidth: 1,
         color: Colors.COLOR_GOLD
     },
+    button: {
+        marginTop: 50,
+    },
 }
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
-        width: 280,
+        width: null,
         fontSize: 16,
         paddingTop: 10,
         paddingBottom: 10,

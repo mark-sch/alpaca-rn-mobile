@@ -4,7 +4,6 @@ import AssetsActions from '../Redux/AssetsRedux'
 export function* getAssetsAttempt(api, action) {
     try {
         const response = yield call(api.getAssets)
-        console.log("get Assets response", response)
         if (response.ok) {
             yield put(AssetsActions.getAssetsSuccess(response.data))
         } else {
@@ -20,7 +19,6 @@ export function* getBarsAttempt(api, action) {
     const { timeframe, symbols, day } = action
     try {
         const response = yield call(api.getBars, timeframe, symbols)
-        console.log(day, ":get bars response", response)
         if (response.ok) {
             yield put(AssetsActions.getBarsSuccess(response.data, day))
         } else {
