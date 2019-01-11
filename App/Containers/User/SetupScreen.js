@@ -8,6 +8,7 @@ import {
 import { connect } from 'react-redux'
 import RNPickerSelect from 'react-native-picker-select'
 
+import AppActions from '../../Redux/AppRedux'
 import {
     ApplicationStyles,
     Colors,
@@ -23,8 +24,8 @@ class SetupScreen extends Component {
 
         this.inputRefs = {}
         this.state = {
-            apiKey: '',
-            secretKey: '',
+            apiKey: 'PKNM5QAHH7ME43X53ETF',
+            secretKey: 'Xt2qASUGkMegKBZ3dtAQbQIUHYuZE1NwvEycTCOt',
             baseUrl: '',
             baseUrlItems: [
                 {
@@ -73,11 +74,12 @@ class SetupScreen extends Component {
             .catch(err => {
             })
 
+        this.props.appStartAttempt(data)
         this.props.navigation.navigate('Main')
     }
 
     render() {
-        const { apiKey, secretKey, baseUrlItems } = this.state
+        const { apiKey, secretKey, baseUrl, baseUrlItems } = this.state
 
         return (
             <View style={styles.mainContainer}>
@@ -90,7 +92,7 @@ class SetupScreen extends Component {
                         onChangeText={(text) => this.setState({ apiKey: text })}
                         value={apiKey}
                         autoCorrect={false}
-                        maxLength={20}
+                        maxLength={100}
                     />
                 </View>
                 <View style={styles.rowContainer}>
@@ -102,7 +104,7 @@ class SetupScreen extends Component {
                         onChangeText={(text) => this.setState({ secretKey: text })}
                         value={secretKey}
                         autoCorrect={false}
-                        maxLength={20}
+                        maxLength={100}
                     />
                 </View>
                 <View style={styles.rowContainer}>
@@ -122,7 +124,7 @@ class SetupScreen extends Component {
                             })
                         }}
                         style={{ ...pickerSelectStyles }}
-                        value={this.state.baseUrl}
+                        value={baseUrl}
                         ref={(el) => {
                             this.inputRefs.picker = el
                         }}
@@ -134,6 +136,7 @@ class SetupScreen extends Component {
                     color={Colors.COLOR_NAV_HEADER}
                     labelColor={Colors.WHITE}
                     height={50}
+                    disabled={!apiKey || !secretKey || !baseUrl}
                     onPress={this.getStarted}
                 />
             </View>
@@ -183,9 +186,11 @@ const pickerSelectStyles = StyleSheet.create({
     },
 })
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
+const mapStateToProps = (state) => ({
+})
 
-export default connect(mapStateToProps, null)(SetupScreen)
+const mapDispatchToProps = dispatch => ({
+	appStartAttempt: data => dispatch(AppActions.appStartAttempt(data)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SetupScreen)
