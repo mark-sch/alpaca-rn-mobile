@@ -18,17 +18,21 @@ import { convert } from '../../Util/Helper';
 class SearchItem extends Component {
 
     render() {
-        const { item, symbolStyle, onPress, bars, preBars } = this.props
+        const { item, symbolStyle, onPress, assets } = this.props
         let currentStockPrice = 0, preClosePrice = 0
         let priceDif = 0, percentage = 0
         let plStyle = styles.upText
         try {
-            if (bars && preBars) {
-                currentStockPrice = bars[item.symbol][0].o
-                preClosePrice = preBars[item.symbol][0].c
-                priceDif = preClosePrice - currentStockPrice
-                percentage = convert((priceDif/preClosePrice*100).toFixed(2), true)
-                plStyle = priceDif > 0 ? styles.upText : styles.downText
+            if (assets) {
+                assets.map(assetItem => {
+                    if (assetItem.symbol === item.symbol) {
+                        currentStockPrice = assetItem.todayBar.o
+                        preClosePrice = assetItem.preBar.c
+                        priceDif = preClosePrice - currentStockPrice
+                        percentage = convert((priceDif/preClosePrice*100).toFixed(2), true)
+                        plStyle = priceDif > 0 ? styles.upText : styles.downText
+                    }
+                })
             }
 
             return (
@@ -98,6 +102,7 @@ const styles = {
 }
 
 const mapStateToProps = (state) => ({
+    assets: state.assets.assets
 })
 
 const mapDispatchToProps = (dispatch) => {

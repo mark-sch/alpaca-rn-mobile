@@ -94,7 +94,7 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
-        fetching: state.positions.fetching
+        fetching: state.assets.fetching
     }
 }
 

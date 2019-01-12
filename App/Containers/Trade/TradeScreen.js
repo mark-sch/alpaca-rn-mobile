@@ -230,14 +230,12 @@ class TradeScreen extends Component {
     }
 
     render() {
-        const { navigation, bars, preBars } = this.props
+        const { navigation } = this.props
         const value = navigation.getParam('value')
 
         return (
             <View style={styles.mainContainer}>
                 <SearchItem
-                    bars={bars}
-                    preBars={preBars}
                     item={value}
                     symbolStyle={styles.symbol}
                 />
