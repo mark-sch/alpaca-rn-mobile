@@ -40,11 +40,29 @@ export const getBarsAttempt = (state, action) => {
 }
 
 export const getBarsSuccess = (state, action) => {
-    if (action.day === 'today') {
-        return state.merge({ fetching: false, error: false, errorMessage: '', bars: action.data })
-    } else {
-        return state.merge({ fetching: false, error: false, errorMessage: '', preBars: action.data })
-    }
+    let { day, data } = action
+    let newAssets = state.assets
+    newAssets = newAssets.map(assetItem => {
+        try {
+            let associatedBar = data[assetItem.symbol][0]
+            if (day === 'today') {
+                assetItem = {
+                    ...assetItem,
+                    todayBar: associatedBar
+                }
+            } else {
+                assetItem = {
+                    ...assetItem,
+                    preBar: associatedBar
+                }
+            }
+            return assetItem
+        } catch (err) {
+            return assetItem
+        }
+    })
+
+    return state.merge({ fetching: false, error: false, errorMessage: '', assets: newAssets })
 }
 
 export const getBarsFailure = (state, action) => {

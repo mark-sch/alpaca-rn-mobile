@@ -36,7 +36,7 @@ class OverviewScreen extends Component {
 
     componentDidMount() {
         this.getData()
-        this.timer = setInterval(() => this.getData(false), 5000)
+        this.timer = setInterval(() => this.getData(false), 60000)
     }
 
     async getData(showLoading = true) {
@@ -146,8 +146,6 @@ class OverviewScreen extends Component {
         const positionSumStyle = positionSum > 0 ? styles.upText : styles.downText
         const portfolioSumColor = positionSum > 0 ? Colors.COLOR_GREEN: Colors.COLOR_DARK_RED
 
-        // console.log('account data:', account)
-        // console.log('orders data:', orders)
         return (
             <View style={styles.container}>
                 <View style={styles.statusbar}>
@@ -213,7 +211,7 @@ class OverviewScreen extends Component {
                         <Text style={styles.label}>
                             Orders Today
                         </Text>
-                        {mergeOrders && mergeOrders.length > 0 ?
+                        {mergeOrders && mergeOrders.length > 1 ?
                             <FlatList
                                 style={styles.list}
                                 data={mergeOrders}

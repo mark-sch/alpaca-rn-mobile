@@ -36,12 +36,12 @@ class SymbolScreen extends Component {
         }
     }
 
-    componentDidMount() {
-        const { navigation, getBars } = this.props
-        const value = navigation.getParam('value')
-        getBars('1Min', value.symbol, 'today')
-        getBars('1D', value.symbol, 'yesterday')
-    }
+    // componentDidMount() {
+    //     const { navigation, getBars } = this.props
+    //     const value = navigation.getParam('value')
+    //     getBars('1Min', value.symbol, 'today')
+    //     getBars('1D', value.symbol, 'yesterday')
+    // }
 
     renderValueDetail = (value) => {
         const { positions, orders } = this.props
@@ -110,14 +110,12 @@ class SymbolScreen extends Component {
     }
 
     render() {
-        const { navigation, bars, preBars } = this.props
+        const { navigation } = this.props
         const value = navigation.getParam('value')
 
         return (
             <View style={styles.mainContainer}>
                 <SearchItem
-                    bars={bars}
-                    preBars={preBars}
                     item={value}
                     symbolStyle={styles.symbol}
                 />
