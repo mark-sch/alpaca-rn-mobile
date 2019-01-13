@@ -51,10 +51,6 @@ const ApplicationStyles = {
             width: Metrics.images.medium,
             height: Metrics.images.medium,
         },
-        emergencyTabBarImage: {
-            width: 48,
-            height: 48,
-        },
         separator: {
             height: 0.5,
             backgroundColor: Colors.COLOR_GRAY,
