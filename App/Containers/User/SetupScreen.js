@@ -75,7 +75,7 @@ class SetupScreen extends Component {
             })
 
         this.props.appStartAttempt(data)
-        this.props.navigation.navigate('Main')
+        this.props.navigation.navigate('Tab')
     }
 
     render() {

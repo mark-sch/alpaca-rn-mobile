@@ -16,10 +16,19 @@ import {
     Fonts
 } from '../../Themes'
 import Button from '../../Components/Button'
+import NavigationIcon from '../../Components/NavigationIcon'
 
 class EmergencyScreen extends Component {
 
-    componentWillReceiveProps(nextProps) {
+    static navigationOptions = (props) => {
+        return {
+            headerRight: (
+                <NavigationIcon
+                    onPress={() => props.navigation.navigate('Search')}
+                    source={Images.search}
+                />
+            ),
+        }
     }
 
     cancelOrders = () => {

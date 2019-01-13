@@ -45,7 +45,9 @@ class TradeItem extends Component {
                         })
                         onValueChange(value)
                     }}
-                    style={{ ...pickerSelectStyles }}
+                    style={{
+                        inputIOS: [pickerSelectStyles.inputIOS, { color: disabled ? Colors.COLOR_GRAY : Colors.COLOR_GOLD }]
+                    }}
                     value={this.state.selectedValue}
                     ref={(el) => {
                         this.inputRefs.picker = el
@@ -78,7 +80,6 @@ const pickerSelectStyles = StyleSheet.create({
         width: 130,
         fontSize: 16,
         paddingTop: 10,
-        // paddingHorizontal: 10,
         paddingBottom: 10,
         borderBottomColor: Colors.COLOR_GOLD,
         borderBottomWidth: 1,

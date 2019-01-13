@@ -71,13 +71,14 @@ class TradeScreen extends Component {
     }
 
     static navigationOptions = (props) => {
+        const submitted = props.navigation.getParam('submitted')
         return {
-            headerLeft: (
+            headerLeft: submitted ?
+                null :
                 <NavigationIcon
                     onPress={() => props.navigation.pop()}
                     source={Images.back}
                 />
-            ),
         }
     }
 
@@ -88,6 +89,7 @@ class TradeScreen extends Component {
                 stopPriceEditable: false,
                 limitPriceEditable: false
             })
+            this.props.navigation.setParams({ submitted: true })
         }
     }
 
@@ -135,6 +137,11 @@ class TradeScreen extends Component {
             disabledSubmitBtn = !side || !timeInForce || !shares || !stopPrice || !limitPrice
         }
 
+        let inputTxtStyle = {
+            ...styles.inputText,
+            color: submitted ? Colors.COLOR_GRAY : Colors.COLOR_GOLD
+        }
+
         return (
             <View style={styles.container}>
                 <KeyboardAwareScrollView>
@@ -149,7 +156,7 @@ class TradeScreen extends Component {
                             Shares
                         </Text>
                         <TextInput
-                            style={styles.inputText}
+                            style={inputTxtStyle}
                             onChangeText={(text) => this.setState({ shares: text })}
                             value={shares}
                             keyboardType='number-pad'
@@ -175,7 +182,7 @@ class TradeScreen extends Component {
                             Limit Price
                         </Text>
                         <TextInput
-                            style={styles.inputText}
+                            style={inputTxtStyle}
                             onChangeText={(text) => this.setState({ limitPrice: text })}
                             value={limitPrice}
                             keyboardType='number-pad'
@@ -189,7 +196,7 @@ class TradeScreen extends Component {
                             Stop Price
                         </Text>
                         <TextInput
-                            style={styles.inputText}
+                            style={inputTxtStyle}
                             onChangeText={(text) => this.setState({ stopPrice: text })}
                             value={stopPrice}
                             keyboardType='number-pad'

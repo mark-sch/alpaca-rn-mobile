@@ -14,13 +14,24 @@ import {
     Metrics,
     Fonts
 } from '../../Themes'
-import OrderItem from './OrderItem';
+import OrderItem from './OrderItem'
+import NavigationIcon from '../../Components/NavigationIcon'
 
 class OrdersScreen extends Component {
 
+    static navigationOptions = (props) => {
+        return {
+            headerRight: (
+                <NavigationIcon
+                    onPress={() => props.navigation.navigate('Search')}
+                    source={Images.search}
+                />
+            ),
+        }
+    }
+
     render() {
         const { orders } = this.props
-        console.log('orders get:', orders)
 
         return (
             <View style={styles.container}>

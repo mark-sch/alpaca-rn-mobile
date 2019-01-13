@@ -10,12 +10,23 @@ import {
     Fonts
 } from '../../Themes'
 import PositionItem from './PositionItem'
+import NavigationIcon from '../../Components/NavigationIcon'
 
 class PositionScreen extends Component {
 
+    static navigationOptions = (props) => {
+        return {
+            headerRight: (
+                <NavigationIcon
+                    onPress={() => props.navigation.navigate('Search')}
+                    source={Images.search}
+                />
+            ),
+        }
+    }
+
     render() {
         const { positions } = this.props
-        console.log('positions get:', positions)
 
         return (
             <View style={styles.container}>

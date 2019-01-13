@@ -1398,8 +1398,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = app.alpaca.markets;
 				PRODUCT_NAME = mobileApp;
-				PROVISIONING_PROFILE = "2ba97dd0-c8d2-4a3f-96db-31ae9361d949";
-				PROVISIONING_PROFILE_SPECIFIER = AlpacaAppStore;
+				PROVISIONING_PROFILE = "e2458f6a-8a37-4ec4-b71a-0c3e8fe097e9";
+				PROVISIONING_PROFILE_SPECIFIER = AlpacaAdHoc4;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

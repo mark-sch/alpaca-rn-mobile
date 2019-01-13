@@ -23,6 +23,8 @@ import {
     capitalize,
     convert
 } from '../../Util/Helper';
+import NavigationIcon from '../../Components/NavigationIcon'
+import Loading from '../../Components/Loading'
 
 class OverviewScreen extends Component {
 
@@ -34,13 +36,26 @@ class OverviewScreen extends Component {
         mergeOrders: []
     }
 
+    static navigationOptions = (props) => {
+        return {
+            headerLeft: null,
+            headerRight: (
+                <NavigationIcon
+                    onPress={() => props.navigation.navigate('Search')}
+                    source={Images.search}
+                />
+            ),
+        }
+    }
+
     componentDidMount() {
         this.getData()
+        this.props.getAssets()
         this.timer = setInterval(() => this.getData(false), 60000)
     }
 
     async getData(showLoading = true) {
-        const { getAssets, getAccount, getOrders, getPositions } = this.props
+        const { getAccount, getOrders, getPositions } = this.props
 
         var start = new Date();
         start.setHours(0,0,0,0);
@@ -48,7 +63,6 @@ class OverviewScreen extends Component {
         var end = new Date();
         end.setHours(23,59,59,999);
 
-        getAssets()
         getAccount()
         getOrders(`?status=all&after=${start.toISOString()}&until=${end.toISOString()}`)
         getPositions(showLoading)
@@ -132,7 +146,7 @@ class OverviewScreen extends Component {
     render() {
         const {
             account,
-            positions,
+            fetching,
             orders
         } = this.props
         const {
@@ -244,6 +258,7 @@ class OverviewScreen extends Component {
                         }
                     </View>
                 </View>
+                {fetching && <Loading />}
             </View>
         )
     }
@@ -294,7 +309,8 @@ const mapStateToProps = (state) => {
     return {
         account: state.account.account,
         orders: state.orders.orders,
-        positions: state.positions.positions
+        positions: state.positions.positions,
+        fetching: state.assets.fetching
     }
 }
 
