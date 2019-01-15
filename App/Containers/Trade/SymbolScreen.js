@@ -16,7 +16,9 @@ import {
 import AssetsActions from '../../Redux/AssetsRedux'
 import { 
     convert,
-    formatValue
+    formatValue,
+    getTodayStart,
+    getTodayEnd
 } from '../../Util/Helper';
 import NavigationIcon from '../../Components/NavigationIcon'
 import Button from '../../Components/Button'
@@ -36,12 +38,19 @@ class SymbolScreen extends Component {
         }
     }
 
-    // componentDidMount() {
-    //     const { navigation, getBars } = this.props
-    //     const value = navigation.getParam('value')
-    //     getBars('1Min', value.symbol, 'today')
-    //     getBars('1D', value.symbol, 'yesterday')
-    // }
+    componentDidMount() {
+        const { navigation, getBars } = this.props
+        const value = navigation.getParam('value')
+        this.timer = setInterval(() => this.getData(value, getBars), 5000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer)
+    }
+
+    async getData(value, getBars) {
+        getBars('1Min', value.symbol, getTodayStart(), getTodayEnd(), 'today')
+    }
 
     renderValueDetail = (value) => {
         const { positions, orders } = this.props
@@ -181,7 +190,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getBars: (timeframe, symbols, day) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols, day)),
+    getBars: (timeframe, symbols, start, end, day) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols, start, end, day)),
     resetBars: () => dispatch(AssetsActions.resetBars()),
 })
 
