@@ -33,11 +33,11 @@ class EmergencyScreen extends Component {
 
     cancelOrders = () => {
         const {
-            orders,
+            openOrders,
             cancelOrder,
         } = this.props
 
-        orders.map(item => {
+        openOrders.map(item => {
             cancelOrder(item.id)
         })
     }
@@ -68,7 +68,7 @@ class EmergencyScreen extends Component {
 
     render() {
         const {
-            orders,
+            openOrders,
             positions,
             configureAccount,
             cancelingOrder,
@@ -96,7 +96,7 @@ class EmergencyScreen extends Component {
 						isLoading={postingOrder}
 						onPress={this.requestOrders}
 					/>
-                    <Text style={styles.label}>Pending Orders: {orders.length}</Text>
+                    <Text style={styles.label}>Pending Orders: {openOrders.length}</Text>
                     <Button
                         style={styles.button}
                         label="CANCEL ALL"
@@ -131,6 +131,7 @@ const mapStateToProps = (state) => {
         postingOrder: state.orders.postingOrder,
         fetching: state.account.fetching,
         orders: state.orders.orders,
+        openOrders: state.orders.openOrders,
         positions: state.positions.positions
     }
 }

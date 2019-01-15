@@ -46,7 +46,14 @@ class OrdersScreen extends Component {
                         keyExtractor={item => item.id}
                         renderItem={({ item, index }) => {
                             return (
-                                <OrderItem order={item} />
+                                <OrderItem
+                                    order={item}
+                                    onPress={() =>
+                                        this.props.navigation.navigate('Symbol', {
+                                            value: item
+                                        })
+                                    }
+                                />
                             )
                         }}
                     />

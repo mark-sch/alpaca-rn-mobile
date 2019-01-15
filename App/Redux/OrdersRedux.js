@@ -3,8 +3,8 @@ import Immutable from 'seamless-immutable'
 
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
-    getOrdersAttempt: ['params'],
-    getOrdersSuccess: ['data'],
+    getOrdersAttempt: ['status', 'params'],
+    getOrdersSuccess: ['data', 'status'],
     getOrdersFailure: ['error'],
     cancelOrderAttempt: ['order_id'],
     cancelOrderSuccess: null,
@@ -20,6 +20,7 @@ export default Creators
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
     orders: [],
+    openOrders: [],
     status: '',
     fetching: false,
     cancelingOrder: false,
@@ -35,7 +36,12 @@ export const getOrdersAttempt = (state, action) => {
 }
 
 export const getOrdersSuccess = (state, action) => {
-    return state.merge({ fetching: false, error: false, errorMessage: '', orders: action.data })
+    const { status, data } = action
+    if (status === 'all') {
+        return state.merge({ fetching: false, error: false, errorMessage: '', orders: data })    
+    } else if (status === 'open') {
+        return state.merge({ fetching: false, error: false, errorMessage: '', openOrders: data })
+    }
 }
 
 export const getOrdersFailure = (state, action) => {
