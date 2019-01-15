@@ -40,7 +40,7 @@ const create = (baseURL = config.BASE_URL) => {
     const postOrder = data => api.post('v1/orders', data)
     const getPositions = () => api.get('v1/positions')
     const getAssets = () => api.get('v1/assets?status=active')
-    const getBars = (timeframe, symbols) => dataApi.get(`v1/bars/${timeframe}?symbols=${symbols}`)
+    const getBars = (timeframe, symbols, start, end) => dataApi.get(`v1/bars/${timeframe}?symbols=${symbols}&start=${start}&end=${end}`)
 
     return {
         setBaseURL,

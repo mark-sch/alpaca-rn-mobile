@@ -1,5 +1,11 @@
 import { call, put } from 'redux-saga/effects'
 import AssetsActions from '../Redux/AssetsRedux'
+import {
+    getTodayStart,
+    getTodayEnd,
+    getYesterdayStart,
+    getYesterdayEnd
+} from '../Util/Helper';
 
 export function* getAssetsAttempt(api, action) {
     try {
@@ -16,8 +22,8 @@ export function* getAssetsAttempt(api, action) {
                     let div = symbols.length > 0 ? ',' : ''
                     symbols = symbols + div + item.symbol
                 })
-                yield put(AssetsActions.getBarsAttempt('1Min', symbols, 'today'))
-                yield put(AssetsActions.getBarsAttempt('1D', symbols, 'yesterday'))
+                yield put(AssetsActions.getBarsAttempt('1Min', symbols, getTodayStart(), getTodayEnd(), 'today'))
+                yield put(AssetsActions.getBarsAttempt('1D', symbols, getYesterdayStart(), getYesterdayEnd(), 'yesterday'))
             }
         } else {
             const message = response.data.message || 'Something went wrong'
@@ -29,9 +35,9 @@ export function* getAssetsAttempt(api, action) {
 }
 
 export function* getBarsAttempt(api, action) {
-    const { timeframe, symbols, day } = action
+    const { timeframe, symbols, start, end, day } = action
     try {
-        const response = yield call(api.getBars, timeframe, symbols)
+        const response = yield call(api.getBars, timeframe, symbols, start, end)
         if (response.ok) {
             yield put(AssetsActions.getBarsSuccess(response.data, day))
         } else {

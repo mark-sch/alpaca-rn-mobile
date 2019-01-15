@@ -44,8 +44,10 @@ export const convert = (value, percent = false) => {
 }
 
 export const formatValue = (value) => {
-    value = parseFloat(value).toFixed(2).toLocaleString()
-    return value
+    return parseFloat(value).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })
 }
 
 export const showAlertMessage = (message, type) => {
@@ -53,4 +55,34 @@ export const showAlertMessage = (message, type) => {
         message,
         type,
     })
+}
+
+export const getYesterdayStart = () => {
+    var start = new Date()
+    start.setDate(start.getDate() - 1)
+    start.setHours(0,0,0,0)
+
+    return start.toISOString()
+}
+
+export const getYesterdayEnd = () => {
+    var end = new Date()
+    end.setDate(end.getDate() - 1)
+    end.setHours(23,59,59,999)
+
+    return end.toISOString()
+}
+
+export const getTodayStart = () => {
+    var start = new Date()
+    start.setHours(0,0,0,0)
+
+    return start.toISOString()
+}
+
+export const getTodayEnd = () => {
+    var end = new Date()
+    end.setHours(23,59,59,999)
+
+    return end.toISOString()
 }
