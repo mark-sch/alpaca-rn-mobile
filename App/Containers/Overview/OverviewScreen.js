@@ -22,7 +22,9 @@ import {
     mergeArray,
     capitalize,
     convert,
-    formatValue
+    formatValue,
+    getTodayStart,
+    getTodayEnd
 } from '../../Util/Helper';
 import NavigationIcon from '../../Components/NavigationIcon'
 import Loading from '../../Components/Loading'
@@ -58,15 +60,9 @@ class OverviewScreen extends Component {
     async getData(showLoading = true) {
         const { getAccount, getOrders, getPositions } = this.props
 
-        var start = new Date();
-        start.setHours(0,0,0,0);
-
-        var end = new Date();
-        end.setHours(23,59,59,999);
-
         getAccount()
-        getOrders('all', `after=${start.toISOString()}&until=${end.toISOString()}`)
-        getOrders('open', `after=${start.toISOString()}&until=${end.toISOString()}`)
+        getOrders('all', `after=${getTodayStart()}&until=${getTodayEnd()}`)
+        getOrders('open', `after=${getTodayStart()}&until=${getTodayEnd()}`)
         getPositions(showLoading)
     }
 

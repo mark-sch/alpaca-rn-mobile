@@ -28,7 +28,7 @@ class SearchItem extends Component {
                     if (assetItem.symbol === item.symbol) {
                         currentStockPrice = assetItem.todayBar.o
                         preClosePrice = assetItem.preBar.c
-                        priceDif = preClosePrice - currentStockPrice
+                        priceDif = currentStockPrice - preClosePrice
                         percentage = convert((priceDif/preClosePrice*100).toFixed(2), true)
                         plStyle = priceDif > 0 ? styles.upText : styles.downText
                     }

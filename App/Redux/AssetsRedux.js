@@ -5,7 +5,7 @@ const { Types, Creators } = createActions({
     getAssetsAttempt: null,
     getAssetsSuccess: ['data'],
     getAssetsFailure: ['error'],
-    getBarsAttempt: ['timeframe', 'symbols', 'day'],
+    getBarsAttempt: ['timeframe', 'symbols', 'start', 'end', 'day'],
     getBarsSuccess: ['data', 'day'],
     getBarsFailure: ['error'],
     resetBars: null
@@ -44,16 +44,19 @@ export const getBarsSuccess = (state, action) => {
     let newAssets = state.assets
     newAssets = newAssets.map(assetItem => {
         try {
-            let associatedBar = data[assetItem.symbol][0]
-            if (day === 'today') {
-                assetItem = {
-                    ...assetItem,
-                    todayBar: associatedBar
-                }
-            } else {
-                assetItem = {
-                    ...assetItem,
-                    preBar: associatedBar
+            let count = data[assetItem.symbol].length
+            if (count > 0) {
+                let associatedBar = data[assetItem.symbol][count - 1] // Get last item
+                if (day === 'today') {
+                    assetItem = {
+                        ...assetItem,
+                        todayBar: associatedBar
+                    }
+                } else {
+                    assetItem = {
+                        ...assetItem,
+                        preBar: associatedBar
+                    }
                 }
             }
             return assetItem
