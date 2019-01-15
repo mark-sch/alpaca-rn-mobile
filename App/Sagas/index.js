@@ -34,7 +34,7 @@ export default function* root() {
         takeLatest(AppTypes.APP_START_ATTEMPT, appStartAttempt, api),
         takeLatest(AccountTypes.GET_ACCOUNT_ATTEMPT, getAccountAttempt, api),
         takeLatest(AccountTypes.CONFIGURE_ACCOUNT_ATTEMPT, configureAccountAttempt, api),
-        takeLatest(OrdersTypes.GET_ORDERS_ATTEMPT, getOrdersAttempt, api),
+        takeEvery(OrdersTypes.GET_ORDERS_ATTEMPT, getOrdersAttempt, api),
         takeEvery(OrdersTypes.CANCEL_ORDER_ATTEMPT, cancelOrderAttempt, api),
         takeEvery(OrdersTypes.POST_ORDER_ATTEMPT, postOrderAttempt, api),
         takeLatest(PositionsTypes.GET_POSITIONS_ATTEMPT, getPositionsAttempt, api),

@@ -13,7 +13,7 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
-import { convert } from '../../Util/Helper';
+import { convert, formatValue } from '../../Util/Helper';
 
 class SearchItem extends Component {
 
@@ -48,10 +48,10 @@ class SearchItem extends Component {
                         </View>
                         <View style={styles.valueContainer}>
                             <Text style={styles.h3}>
-                                {convert(currentStockPrice.toFixed(2))}
+                                ${formatValue(currentStockPrice)}
                             </Text>
                             <Text style={plStyle}>
-                                {`${convert(priceDif.toFixed(2))} (${percentage})`}
+                                {`${convert(priceDif)} (${percentage})`}
                             </Text>
                         </View>
                         <View style={styles.separator} />

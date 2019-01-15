@@ -10,7 +10,7 @@ const create = (baseURL = config.BASE_URL) => {
 			'APCA-API-KEY-ID': config.APCA_API_KEY_ID,
 			'APCA-API-SECRET-KEY': config.APCA_API_SECRET_KEY,
 		},
-        timeout: 15000
+        timeout: 25000
     })
 
     const dataApi = apisauce.create({
@@ -19,7 +19,7 @@ const create = (baseURL = config.BASE_URL) => {
 			'APCA-API-KEY-ID': config.APCA_API_KEY_ID,
 			'APCA-API-SECRET-KEY': config.APCA_API_SECRET_KEY,
 		},
-        timeout: 15000
+        timeout: 50000
     })
 
     const setBaseURL = url => api.setBaseURL(url)
@@ -35,7 +35,7 @@ const create = (baseURL = config.BASE_URL) => {
     }
     const getAccount = () => api.get('v1/account')
     const configureAccount = data => api.patch('v1/account/configurations', data)
-    const getOrders = params => api.get('v1/orders' + params)
+    const getOrders = (status, params) => api.get(`v1/orders?status=${status}&${params}`)
     const cancelOrder = order_id => api.delete(`v1/orders/${order_id}`)
     const postOrder = data => api.post('v1/orders', data)
     const getPositions = () => api.get('v1/positions')

@@ -21,7 +21,8 @@ import {
 import {
     mergeArray,
     capitalize,
-    convert
+    convert,
+    formatValue
 } from '../../Util/Helper';
 import NavigationIcon from '../../Components/NavigationIcon'
 import Loading from '../../Components/Loading'
@@ -64,7 +65,8 @@ class OverviewScreen extends Component {
         end.setHours(23,59,59,999);
 
         getAccount()
-        getOrders(`?status=all&after=${start.toISOString()}&until=${end.toISOString()}`)
+        getOrders('all', `after=${start.toISOString()}&until=${end.toISOString()}`)
+        getOrders('open', `after=${start.toISOString()}&until=${end.toISOString()}`)
         getPositions(showLoading)
     }
 
@@ -170,7 +172,7 @@ class OverviewScreen extends Component {
                         Portfolio Value
                     </Text>
                     <Text style={styles.h1}>
-                        ${account && account.portfolio_value && parseFloat(account.portfolio_value).toLocaleString()}
+                        ${account && account.portfolio_value && formatValue(account.portfolio_value)}
                     </Text>
                     <Text style={[styles.h3, { color: portfolioSumColor }]}>
                         {convert(positionSum)}
@@ -180,7 +182,7 @@ class OverviewScreen extends Component {
                         Buying Power
                     </Text>
                     <Text style={styles.h2}>
-                        ${account && account.buying_power && parseFloat(account.buying_power).toLocaleString()}
+                        ${account && account.buying_power && formatValue(account.buying_power)}
                     </Text>
 
                     <View style={styles.section}>
@@ -195,7 +197,7 @@ class OverviewScreen extends Component {
                                 {positionUpCount}
                             </Text>
                             <Text style={[styles.upText, { textAlign: 'right' }]}>
-                                {convert(positionUpSum.toFixed(2))}
+                                {convert(positionUpSum)}
                             </Text>
                         </View>
                         <View style={styles.positionsRow}>
@@ -206,7 +208,7 @@ class OverviewScreen extends Component {
                                 {positionDownCount}
                             </Text>
                             <Text style={[styles.downText, { textAlign: 'right' }]}>
-                                {convert(positionDownSum.toFixed(2))}
+                                {convert(positionDownSum)}
                             </Text>
                         </View>
                         <View style={styles.separator} />
@@ -317,7 +319,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getAccount: () => dispatch(AccountActions.getAccountAttempt()),
-        getOrders: (params) => dispatch(OrdersActions.getOrdersAttempt(params)),
+        getOrders: (status, params) => dispatch(OrdersActions.getOrdersAttempt(status, params)),
         getPositions: (showLoading) => dispatch(PositionsActions.getPositionsAttempt(showLoading)),
         getAssets: () => dispatch(AssetsActions.getAssetsAttempt()),
     }

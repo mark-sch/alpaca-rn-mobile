@@ -20,6 +20,10 @@ export const mergeArray = (array) => {
 }
 
 export const convert = (value, percent = false) => {
+    if (percent === false && value != undefined) {
+        value = formatValue(value)
+    }
+
     if (value > 0) {
         if (!percent) {
             return `+$${value}`
@@ -37,6 +41,11 @@ export const convert = (value, percent = false) => {
         } else
             return `${value}%`
     }
+}
+
+export const formatValue = (value) => {
+    value = parseFloat(value).toFixed(2).toLocaleString()
+    return value
 }
 
 export const showAlertMessage = (message, type) => {

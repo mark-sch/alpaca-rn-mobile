@@ -41,7 +41,14 @@ class PositionScreen extends Component {
                         keyExtractor={item => item.asset_id}
                         renderItem={({ item, index }) => {
                             return (
-                                <PositionItem position={item} />
+                                <PositionItem
+                                    position={item}
+                                    onPress={() =>
+                                        this.props.navigation.navigate('Symbol', {
+                                            value: item
+                                        })
+                                    }
+                                />
                             )
                         }}
                     />
