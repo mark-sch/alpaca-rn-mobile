@@ -3,7 +3,8 @@ import {
     View,
     Text,
     TextInput,
-    StyleSheet
+    StyleSheet,
+    AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
 import RNPickerSelect from 'react-native-picker-select'
@@ -14,7 +15,6 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
-import Storage from '../../Util/Storage'
 import Button from '../../Components/Button'
 
 class SetupScreen extends Component {
@@ -40,7 +40,22 @@ class SetupScreen extends Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let apiKey = ''
+        let secretKey = ''
+        let baseUrl = ''
+        try {
+            apiKey = await AsyncStorage.getItem('apiKey')
+            secretKey = await AsyncStorage.getItem('secretKey')
+            baseUrl = await AsyncStorage.getItem('baseUrl')
+            this.setState({
+                apiKey,
+                secretKey,
+                baseUrl
+            })
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 
     getStarted = () => {
@@ -52,27 +67,9 @@ class SetupScreen extends Component {
             baseUrl,
         }
 
-        Storage.save({
-            key: 'KEYS',
-            data: data,
-            expires: null
-        })
-
-        Storage
-            .load({key: 'KEYS', autoSync: false})
-            .then((keys) => {
-                let apiKeyArray = keys.apiKeyArray ? keys.apiKeyArray : []
-                apiKeyArray.push(apiKey)
-                Storage.save({
-                    key: 'KEYS',
-                    data: {
-                        apiKeyArray
-                    },
-                    expires: null
-                })
-            })
-            .catch(err => {
-            })
+        AsyncStorage.setItem('apiKey', apiKey)
+        AsyncStorage.setItem('secretKey', secretKey)
+        AsyncStorage.setItem('baseUrl', baseUrl)
 
         this.props.appStartAttempt(data)
         this.props.navigation.navigate('Tab')
