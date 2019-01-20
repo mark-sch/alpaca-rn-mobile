@@ -20,8 +20,8 @@ export function* configureAccountAttempt(api, action) {
     try {
         const response = yield call(api.configureAccount, action.data)
         if (response.ok) {
-            showAlertMessage("Success", "success")
             yield put(AccountActions.configureAccountSuccess(response.data))
+            yield put(AccountActions.getAccountAttempt())
         } else {
             const message = response.data.message || 'Something went wrong'
             showAlertMessage(message, "danger")

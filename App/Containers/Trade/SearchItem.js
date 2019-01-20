@@ -18,7 +18,7 @@ import { convert, formatValue } from '../../Util/Helper';
 class SearchItem extends Component {
 
     render() {
-        const { item, symbolStyle, onPress, assets } = this.props
+        const { item, symbolStyle, style, onPress, assets } = this.props
         let currentStockPrice = 0, preClosePrice = 0
         let priceDif = 0, percentage = 0
         let plStyle = styles.upText
@@ -37,6 +37,7 @@ class SearchItem extends Component {
 
             return (
                 <TouchableOpacity
+                    style={style}
                     activeOpacity={0.9}
                     onPress={onPress}
                 >

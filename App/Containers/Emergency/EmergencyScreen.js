@@ -59,22 +59,15 @@ class EmergencyScreen extends Component {
         })
     }
 
-    suspendTrade = (configureAccount) => {
-        let params = {
-            "suspend_trade": true
-        }
-        configureAccount(params)
-    }
-
     render() {
         const {
             openOrders,
             positions,
-            configureAccount,
             cancelingOrder,
             postingOrder,
-            fetching
+            account
         } = this.props
+        const suspendStatus = account.trade_suspended_by_user
 
         return (
             <View style={styles.container}>
@@ -85,9 +78,9 @@ class EmergencyScreen extends Component {
                     <Text style={styles.label}>API Calls In Last Hour: 5,394</Text>
                     <Button
                         style={styles.button}
-                        label="SUSPEND API"
-						isLoading={fetching}
-						onPress={() => this.suspendTrade(configureAccount)}
+                        color={suspendStatus ? Colors.COLOR_GREEN : Colors.RED}
+                        label={suspendStatus ? "RECOVER API" : "SUSPEND API"}
+						onPress={() => this.props.navigation.navigate(suspendStatus ? 'RecoverAPI' : 'SuspendAPI')}
 					/>
                     <Text style={styles.label}>Open Positions: {positions.length}</Text>
                     <Button
@@ -127,6 +120,7 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
+        account: state.account.account,
         cancelingOrder: state.orders.cancelingOrder,
         postingOrder: state.orders.postingOrder,
         fetching: state.account.fetching,

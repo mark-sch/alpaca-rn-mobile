@@ -82,19 +82,7 @@ class TradeScreen extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.postingOrder && !nextProps.postingOrder && nextProps.orderResult) {
-            this.setState({
-                submitted: true,
-                stopPriceEditable: false,
-                limitPriceEditable: false
-            })
-            this.props.navigation.setParams({ submitted: true })
-        }
-    }
-
-    requestOrder = (value) => {
-        const { postOrder } = this.props
+    reviewOrder = (value) => {
         const { shares, limitPrice, stopPrice, side, type, timeInForce } = this.state
 
         const orderData = {
@@ -107,7 +95,10 @@ class TradeScreen extends Component {
             stop_price: stopPrice
         }
         console.log('updated value:', orderData)
-        postOrder(orderData)
+        this.props.navigation.navigate('TradeReview', {
+            value,
+            orderData
+        })
     }
 
     renderBody = (value) => {
@@ -223,13 +214,13 @@ class TradeScreen extends Component {
                     /> :
                     <Button
                         style={styles.button}
-                        label="Submit"
+                        label="Review Your Order"
                         color={Colors.COLOR_NAV_HEADER}
                         labelColor={Colors.BLACK}
                         height={50}
                         isLoading={postingOrder}
                         disabled={disabledSubmitBtn}
-                        onPress={() => this.requestOrder(value)}
+                        onPress={() => this.reviewOrder(value)}
                     />
                 }
             </View>

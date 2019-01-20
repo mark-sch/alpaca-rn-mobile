@@ -65,10 +65,6 @@ class OrdersScreen extends Component {
 
 const styles = {
     ...ApplicationStyles.screen,
-    label: {
-        ...Fonts.style.h3,
-        color: Colors.COLOR_GRAY
-    },
     list: {
         flex: 1,
         marginTop: 40,
