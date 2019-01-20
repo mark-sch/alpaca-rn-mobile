@@ -6,19 +6,23 @@ import SetupScreen from './User/SetupScreen'
 import SearchScreen from './Trade/SearchScreen'
 import SymbolScreen from './Trade/SymbolScreen'
 import TradeScreen from './Trade/TradeScreen'
-import { Colors, Images } from '../Themes'
+import TradeReviewScreen from './Trade/TradeReviewScreen'
 import OverviewScreen from './Overview/OverviewScreen'
 import PositionScreen from './Position/PositionScreen'
 import OrdersScreen from './Order/OrdersScreen'
 import EmergencyScreen from './Emergency/EmergencyScreen'
+import SuspendAPIScreen from './Emergency/SuspendAPIScreen'
+import RecoverAPIScreen from './Emergency/RecoverAPIScreen'
 import TabImage from '../Components/TabImage'
+import { Colors, Images } from '../Themes'
 
 const OverviewStack = createStackNavigator(
     {
         Overview: OverviewScreen,
         Search: SearchScreen,
         Symbol: SymbolScreen,
-        Trade: TradeScreen
+        Trade: TradeScreen,
+        TradeReview: TradeReviewScreen,
     },
     {
         defaultNavigationOptions: {
@@ -34,7 +38,8 @@ const PositionsStack = createStackNavigator(
         Positions: PositionScreen,
         Search: SearchScreen,
         Symbol: SymbolScreen,
-        Trade: TradeScreen
+        Trade: TradeScreen,
+        TradeReview: TradeReviewScreen,
     },
     {
         defaultNavigationOptions: {
@@ -50,7 +55,8 @@ const OrdersStack = createStackNavigator(
         Orders: OrdersScreen,
         Search: SearchScreen,
         Symbol: SymbolScreen,
-        Trade: TradeScreen
+        Trade: TradeScreen,
+        TradeReview: TradeReviewScreen,
     },
     {
         defaultNavigationOptions: {
@@ -66,7 +72,10 @@ const EmergencyStack = createStackNavigator(
         Emergency: EmergencyScreen,
         Search: SearchScreen,
         Symbol: SymbolScreen,
-        Trade: TradeScreen
+        Trade: TradeScreen,
+        TradeReview: TradeReviewScreen,
+        SuspendAPI: SuspendAPIScreen,
+        RecoverAPI: RecoverAPIScreen,
     },
     {
         defaultNavigationOptions: {
@@ -118,7 +127,7 @@ const AppNavigator = createStackNavigator(
         Tab: TabStack,
     },
     {
-        initialRouteName: "Setup",
+        initialRouteName: "Tab",
         defaultNavigationOptions: {
             header: null
         }

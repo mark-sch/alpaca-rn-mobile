@@ -136,10 +136,6 @@ class SymbolScreen extends Component {
 
 const styles = {
     ...ApplicationStyles.screen,
-    container: {
-        ...ApplicationStyles.screen.container,
-        marginTop: 30
-    },
     h2: {
         ...Fonts.style.h2,
         color: Colors.BLACK
