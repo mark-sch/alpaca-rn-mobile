@@ -29,19 +29,23 @@ class RecoverAPIScreen extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.account.trade_suspended_by_user) {
+        if (this.props.account.trade_suspended_by_user && !nextProps.account.trade_suspended_by_user) {
             this.setState({ condition: 'RECOVERING_API_SUCCESS' })
+            this.props.navigation.setParams({ condition: 'RECOVERING_API_SUCCESS' })
         }
     }
 
     static navigationOptions = (props) => {
+        const condition = props.navigation.getParam('condition')
         return {
-            headerLeft: (
+            headerLeft: condition === 'RECOVERING_API_SUCCESS' ?
+            null :
+            (
                 <NavigationIcon
                     onPress={() => props.navigation.pop()}
                     source={Images.back}
                 />
-            ),
+            )
         }
     }
 

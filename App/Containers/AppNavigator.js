@@ -13,6 +13,7 @@ import OrdersScreen from './Order/OrdersScreen'
 import EmergencyScreen from './Emergency/EmergencyScreen'
 import SuspendAPIScreen from './Emergency/SuspendAPIScreen'
 import RecoverAPIScreen from './Emergency/RecoverAPIScreen'
+import LiquidationScreen from './Emergency/LiquidationScreen'
 import TabImage from '../Components/TabImage'
 import { Colors, Images } from '../Themes'
 
@@ -76,6 +77,7 @@ const EmergencyStack = createStackNavigator(
         TradeReview: TradeReviewScreen,
         SuspendAPI: SuspendAPIScreen,
         RecoverAPI: RecoverAPIScreen,
+        Liquidation: LiquidationScreen,
     },
     {
         defaultNavigationOptions: {
