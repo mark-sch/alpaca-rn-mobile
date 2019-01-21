@@ -81,7 +81,8 @@ class LiquidationScreen extends Component {
             content = (
                 <View style={styles.container}>
                     <Text style={styles.h1}>
-                        Liquidating All Positions
+                        Liquidating{"\n"}
+                        All Positions
                     </Text>
                     <Text style={[styles.h3, { marginTop: 20 }]}>
                         You are placing an order to sell all your positions with market order.{"\n\n"}

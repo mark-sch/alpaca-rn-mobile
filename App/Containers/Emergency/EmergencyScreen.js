@@ -45,7 +45,7 @@ class EmergencyScreen extends Component {
                     <Image source={Images.logo} style={styles.logo}></Image>
                 </View>
                 <View style={styles.mainContainer}>
-                    <Text style={styles.label}>API Calls In Last Hour: 5,394</Text>
+                    <Text style={styles.label}>API Calls In Last Hour: _</Text>
                     <Button
                         style={styles.button}
                         color={suspendStatus ? Colors.COLOR_GREEN : Colors.RED}
