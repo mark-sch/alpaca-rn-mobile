@@ -6,7 +6,7 @@ import {
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-import AccountActions from '../../Redux/AccountRedux'
+import OrdersActions from '../../Redux/OrdersRedux'
 import {
     ApplicationStyles,
     Images,
@@ -16,29 +16,23 @@ import {
 import Button from '../../Components/Button'
 import NavigationIcon from '../../Components/NavigationIcon'
 
-class SuspendAPIScreen extends Component {
+class LiquidationScreen extends Component {
 
     state = {
-        condition: 'SUSPENDING_API'
-    }
-
-    componentDidMount() {
-        this.setState({
-            condition: this.props.account.trade_suspended_by_user ? 'RECOVERING_API' : 'SUSPENDING_API'
-        })
+        condition: 'LIQUIDATION'
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!this.props.account.trade_suspended_by_user && nextProps.account.trade_suspended_by_user) {
-            this.setState({ condition: 'SUSPENDING_API_SUCCESS' })
-            this.props.navigation.setParams({ condition: 'SUSPENDING_API_SUCCESS' })
+        if (this.props.postingOrder && !nextProps.postingOrder && nextProps.orderResult) {
+            this.setState({ condition: 'LIQUIDATION_SUCCESS' })
+            this.props.navigation.setParams({ condition: 'LIQUIDATION_SUCCESS' })
         }
     }
 
     static navigationOptions = (props) => {
         const condition = props.navigation.getParam('condition')
         return {
-            headerLeft: condition === 'SUSPENDING_API_SUCCESS' ?
+            headerLeft: condition === 'LIQUIDATION_SUCCESS' ?
             null :
             (
                 <NavigationIcon
@@ -49,31 +43,48 @@ class SuspendAPIScreen extends Component {
         }
     }
 
-    suspendTrade = (configureAccount) => {
-        let params = {
-            "suspend_trade": true
-        }
-        configureAccount(params)
+    requestOrders = () => {
+        const {
+            positions,
+            postOrder
+        } = this.props
+
+        positions.map(item => {
+            const updatedItem = {
+                ...item,
+                type: "market",
+                time_in_force: "gtc",
+                side: "sell"
+            }
+            postOrder(updatedItem)
+        })
+    }
+
+    getPositionsArray = () => {
+        const { positions } = this.props
+        let symbols = ''
+        positions.map(item => {
+            let div = symbols.length > 0 ? ', ' : ''
+            symbols = symbols + div + item.symbol
+        })
+
+        return symbols
     }
 
     renderContent = () => {
         const { condition } = this.state
-        const {
-            configureAccount,
-            fetching
-        } = this.props
+        const { positions, postingOrder, orderResult } = this.props
 
         let content
-        if (condition === 'SUSPENDING_API') {
+        if (condition === 'LIQUIDATION') {
             content = (
                 <View style={styles.container}>
                     <Text style={styles.h1}>
-                        Suspending Your API
+                        Liquidating All Positions
                     </Text>
                     <Text style={[styles.h3, { marginTop: 20 }]}>
-                        You are suspending your API. This will stop any new orders to come in to the system.{"\n\n"}
-                        You sent 5,394 API calls in last one hour.{"\n\n"}
-                        After suspending your API, you can recover it by clicking “RECOVER API” on Emergency tab.
+                        You are placing an order to sell all your positions with market order.{"\n\n"}
+                        You currently have {positions.length} total positions in {this.getPositionsArray()}.
                     </Text>
                     <Button
                         style={styles.button}
@@ -81,21 +92,22 @@ class SuspendAPIScreen extends Component {
                         color={Colors.COLOR_NAV_HEADER}
                         labelColor={Colors.BLACK}
                         height={50}
-                        isLoading={fetching}
-                        onPress={() => this.suspendTrade(configureAccount)}
+                        isLoading={postingOrder}
+                        onPress={this.requestOrders}
                     />
                 </View>
             )
-        } else if (condition === 'SUSPENDING_API_SUCCESS') {
+        } else if (condition === 'LIQUIDATION_SUCCESS') {
             content = (
                 <View style={styles.container}>
                     <Text style={styles.label}>
-                        API Suspension Submitted
+                        Order Submitted
                     </Text>
-                    <Text style={[styles.h3, { marginTop: 66 }]}>
-                        Now, you have suspended your API.{"\n\n"}
-                        In order to recover your API, go to Emergency tab then click “RECOVER API”.
-                    </Text>
+                    <ScrollView style={styles.jsonData}>
+                        <Text style={{ color: 'white' }}>
+                            {JSON.stringify(orderResult, undefined, 4)}
+                        </Text>
+                    </ScrollView>
                     <Button
                         style={styles.button}
                         label="Done"
@@ -136,19 +148,27 @@ const styles = {
         left: 0,
         right: 0,
     },
+    jsonData: {
+        flex: 1,
+        marginTop: 20,
+        marginBottom: 70,
+        paddingLeft: 5,
+        backgroundColor: Colors.COLOR_CORE_TEXT
+    },
 }
 
 const mapStateToProps = (state) => {
     return {
-        account: state.account.account,
-        fetching: state.account.fetching,
+        postingOrder: state.orders.postingOrder,
+        orders: state.orders.orders,
+        positions: state.positions.positions
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        configureAccount: data => dispatch(AccountActions.configureAccountAttempt(data))
+        postOrder: data => dispatch(OrdersActions.postOrderAttempt(data)),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SuspendAPIScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(LiquidationScreen)

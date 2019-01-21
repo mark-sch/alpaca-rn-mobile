@@ -42,29 +42,11 @@ class EmergencyScreen extends Component {
         })
     }
 
-    requestOrders = () => {
-        const {
-            positions,
-            postOrder
-        } = this.props
-
-        positions.map(item => {
-            const updatedItem = {
-                ...item,
-                type: "market",
-                time_in_force: "gtc",
-                side: "sell"
-            }
-            postOrder(updatedItem)
-        })
-    }
-
     render() {
         const {
             openOrders,
             positions,
             cancelingOrder,
-            postingOrder,
             account
         } = this.props
         const suspendStatus = account.trade_suspended_by_user
@@ -86,8 +68,7 @@ class EmergencyScreen extends Component {
                     <Button
                         style={styles.button}
                         label="LIQUIDATE ALL"
-						isLoading={postingOrder}
-						onPress={this.requestOrders}
+						onPress={() => this.props.navigation.navigate('Liquidation')}
 					/>
                     <Text style={styles.label}>Pending Orders: {openOrders.length}</Text>
                     <Button
