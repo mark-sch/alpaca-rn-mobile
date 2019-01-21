@@ -31,22 +31,10 @@ class EmergencyScreen extends Component {
         }
     }
 
-    cancelOrders = () => {
-        const {
-            openOrders,
-            cancelOrder,
-        } = this.props
-
-        openOrders.map(item => {
-            cancelOrder(item.id)
-        })
-    }
-
     render() {
         const {
             openOrders,
             positions,
-            cancelingOrder,
             account
         } = this.props
         const suspendStatus = account.trade_suspended_by_user
@@ -74,8 +62,7 @@ class EmergencyScreen extends Component {
                     <Button
                         style={styles.button}
                         label="CANCEL ALL"
-						isLoading={cancelingOrder}
-						onPress={this.cancelOrders}
+						onPress={() => this.props.navigation.navigate('CancelOrder')}
 					/>
                 </View>
             </View>

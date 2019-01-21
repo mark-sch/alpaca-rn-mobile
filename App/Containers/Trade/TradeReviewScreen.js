@@ -71,6 +71,7 @@ class TradeReviewScreen extends Component {
                         color={Colors.COLOR_NAV_HEADER}
                         labelColor={Colors.BLACK}
                         height={50}
+                        onPress={() => this.props.navigation.pop(3)}
                     />
                 </View>
             )
