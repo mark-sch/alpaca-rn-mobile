@@ -22,7 +22,7 @@ export function* cancelOrderAttempt(api, action) {
     try {
         const response = yield call(api.cancelOrder, order_id)
         if (response.ok) {
-            showAlertMessage("Cancel order success", "success")
+            // showAlertMessage("Cancel order success", "success")
             yield put(OrdersActions.cancelOrderSuccess(response.data))
         } else {
             const message = response.data.message || 'Something went wrong'
@@ -38,7 +38,7 @@ export function* postOrderAttempt(api, action) {
     try {
         const response = yield call(api.postOrder, data)
         if (response.ok) {
-            showAlertMessage("Post order success", "success")
+            // showAlertMessage("Post order success", "success")
             yield put(OrdersActions.postOrderSuccess(response.data))
         } else {
             const message = response.data.message || 'Something went wrong'

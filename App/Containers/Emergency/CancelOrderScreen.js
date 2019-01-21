@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    ScrollView
+    FlatList
 } from 'react-native'
 import { connect } from 'react-redux'
 import _ from 'lodash'
@@ -17,23 +17,28 @@ import {
 import Button from '../../Components/Button'
 import NavigationIcon from '../../Components/NavigationIcon'
 
-class LiquidationScreen extends Component {
+class CancelOrderScreen extends Component {
 
     state = {
-        condition: 'LIQUIDATION'
+        condition: 'CANCEL_ORDER',
+        openOrders: []
+    }
+
+    componentDidMount() {
+        this.setState({ openOrders: this.props.openOrders })
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.postingOrder && !nextProps.postingOrder && nextProps.orderResult) {
-            this.setState({ condition: 'LIQUIDATION_SUCCESS' })
-            this.props.navigation.setParams({ condition: 'LIQUIDATION_SUCCESS' })
+        if (this.props.cancelingOrder && !nextProps.cancelingOrder) {
+            this.setState({ condition: 'CANCEL_ORDER_SUCCESS' })
+            this.props.navigation.setParams({ condition: 'CANCEL_ORDER_SUCCESS' })
         }
     }
 
     static navigationOptions = (props) => {
         const condition = props.navigation.getParam('condition')
         return {
-            headerLeft: condition === 'LIQUIDATION_SUCCESS' ?
+            headerLeft: condition === 'CANCEL_ORDER_SUCCESS' ?
             null :
             (
                 <NavigationIcon
@@ -44,48 +49,32 @@ class LiquidationScreen extends Component {
         }
     }
 
-    requestOrders = () => {
+    cancelOrders = () => {
         const {
-            positions,
-            postOrder
+            openOrders,
+            cancelOrder,
         } = this.props
 
-        positions.map(item => {
-            const updatedItem = {
-                ...item,
-                type: "market",
-                time_in_force: "gtc",
-                side: "sell"
-            }
-            postOrder(updatedItem)
+        openOrders.map(item => {
+            cancelOrder(item.id)
         })
-    }
-
-    getPositionsArray = () => {
-        const { positions } = this.props
-        let symbols = ''
-        positions.map(item => {
-            let div = symbols.length > 0 ? ', ' : ''
-            symbols = symbols + div + item.symbol
-        })
-
-        return symbols
     }
 
     renderContent = () => {
-        const { condition } = this.state
-        const { positions, postingOrder, orderResult } = this.props
+        const { condition, openOrders } = this.state
+        const { cancelingOrder } = this.props
 
         let content
-        if (condition === 'LIQUIDATION') {
+        if (condition === 'CANCEL_ORDER') {
             content = (
                 <View style={styles.container}>
                     <Text style={styles.h1}>
-                        Liquidating All Positions
+                        Cancelling{"\n"}
+                        All Open Orders
                     </Text>
                     <Text style={[styles.h3, { marginTop: 20 }]}>
-                        You are placing an order to sell all your positions with market order.{"\n\n"}
-                        You currently have {positions.length} total positions in {this.getPositionsArray()}.
+                        You are cancelling all open orders.{"\n\n"}
+                        You currently have {openOrders.length} open orders.
                     </Text>
                     <Button
                         style={styles.button}
@@ -93,22 +82,29 @@ class LiquidationScreen extends Component {
                         color={Colors.COLOR_NAV_HEADER}
                         labelColor={Colors.BLACK}
                         height={50}
-                        isLoading={postingOrder}
-                        onPress={this.requestOrders}
+                        isLoading={cancelingOrder}
+                        onPress={this.cancelOrders}
                     />
                 </View>
             )
-        } else if (condition === 'LIQUIDATION_SUCCESS') {
+        } else if (condition === 'CANCEL_ORDER_SUCCESS') {
             content = (
                 <View style={styles.container}>
                     <Text style={styles.label}>
-                        Order Submitted
+                        Order Cancellation Submitted
                     </Text>
-                    <ScrollView style={styles.jsonData}>
-                        <Text style={{ color: 'white' }}>
-                            {JSON.stringify(orderResult, undefined, 4)}
-                        </Text>
-                    </ScrollView>
+                    <FlatList
+                        style={styles.list}
+                        data={openOrders}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <Text style={{ color: 'white' }}>
+                                    {`DELETE/v1/orders/{${item.id}}`}
+                                </Text>
+                            )
+                        }}
+                    />
                     <Button
                         style={styles.button}
                         label="Done"
@@ -149,28 +145,27 @@ const styles = {
         left: 0,
         right: 0,
     },
-    jsonData: {
+    list: {
         flex: 1,
         marginTop: 20,
         marginBottom: 70,
         paddingLeft: 5,
+        paddingTop: 10,
         backgroundColor: Colors.COLOR_CORE_TEXT
     },
 }
 
 const mapStateToProps = (state) => {
     return {
-        postingOrder: state.orders.postingOrder,
-        orders: state.orders.orders,
-        positions: state.positions.positions,
-        orderResult: state.orders.orderResult,
+        cancelingOrder: state.orders.cancelingOrder,
+        openOrders: state.orders.openOrders,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        postOrder: data => dispatch(OrdersActions.postOrderAttempt(data)),
+        cancelOrder: order_id => dispatch(OrdersActions.cancelOrderAttempt(order_id)),
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LiquidationScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(CancelOrderScreen)
