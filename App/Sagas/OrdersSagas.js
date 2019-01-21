@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects'
 import OrdersActions from '../Redux/OrdersRedux'
-import { showAlertMessage } from '../Util/Helper'
+import { showAlertMessage, getTodayStart, getTodayEnd } from '../Util/Helper'
 
 export function* getOrdersAttempt(api, action) {
     const { status, params } = action
@@ -24,6 +24,8 @@ export function* cancelOrderAttempt(api, action) {
         if (response.ok) {
             // showAlertMessage("Cancel order success", "success")
             yield put(OrdersActions.cancelOrderSuccess(response.data))
+            yield put(OrdersActions.getOrdersAttempt('all', `after=${getTodayStart()}&until=${getTodayEnd()}`))
+            yield put(OrdersActions.getOrdersAttempt('open', `after=${getTodayStart()}&until=${getTodayEnd()}`))
         } else {
             const message = response.data.message || 'Something went wrong'
             yield put(OrdersActions.cancelOrderFailure(message))
@@ -40,6 +42,8 @@ export function* postOrderAttempt(api, action) {
         if (response.ok) {
             // showAlertMessage("Post order success", "success")
             yield put(OrdersActions.postOrderSuccess(response.data))
+            yield put(OrdersActions.getOrdersAttempt('all', `after=${getTodayStart()}&until=${getTodayEnd()}`))
+            yield put(OrdersActions.getOrdersAttempt('open', `after=${getTodayStart()}&until=${getTodayEnd()}`))
         } else {
             const message = response.data.message || 'Something went wrong'
             showAlertMessage(message, "danger")
