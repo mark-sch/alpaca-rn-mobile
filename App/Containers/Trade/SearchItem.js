@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    ViewPropTypes
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -18,10 +19,13 @@ import { convert, formatValue } from '../../Util/Helper';
 class SearchItem extends Component {
 
     render() {
-        const { item, symbolStyle, style, onPress, assets } = this.props
+        const { item, isLargeStyle, style, onPress, assets } = this.props
         let currentStockPrice = 0, preClosePrice = 0
         let priceDif = 0, percentage = 0
         let plStyle = styles.upText
+        const symbolStyle = isLargeStyle ? styles.h1 : styles.h2
+        const stockPriceStyle = isLargeStyle ? styles.h2 : styles.h3
+
         try {
             if (assets) {
                 assets.map(assetItem => {
@@ -30,7 +34,7 @@ class SearchItem extends Component {
                         preClosePrice = assetItem.preBar.c
                         priceDif = currentStockPrice - preClosePrice
                         percentage = convert((priceDif/preClosePrice*100).toFixed(2), true)
-                        plStyle = priceDif > 0 ? styles.upText : styles.downText
+                        plStyle = priceDif >= 0 ? styles.upText : styles.downText
                     }
                 })
             }
@@ -43,12 +47,12 @@ class SearchItem extends Component {
                 >
                     <View style={styles.rowContainer}>
                         <View style={{ alignSelf: 'center' }}>
-                            <Text style={[styles.h2, symbolStyle]}>
+                            <Text style={symbolStyle}>
                                 {item.symbol}
                             </Text>
                         </View>
                         <View style={styles.valueContainer}>
-                            <Text style={styles.h3}>
+                            <Text style={stockPriceStyle}>
                                 ${formatValue(currentStockPrice)}
                             </Text>
                             <Text style={plStyle}>
@@ -66,13 +70,19 @@ class SearchItem extends Component {
 }
 
 SearchItem.propTypes = {
+    style: ViewPropTypes.style,
     item: PropTypes.object.isRequired,
     symbolStyle: PropTypes.object,
-    onPress: PropTypes.func
+    onPress: PropTypes.func,
+    isLargeStyle: PropTypes.bool,
 }
 
 const styles = {
     ...ApplicationStyles.screen,
+    h1: {
+        ...Fonts.style.h1,
+        color: Colors.BLACK
+    },
     h2: {
         ...Fonts.style.h2,
         color: Colors.BLACK

@@ -23,9 +23,15 @@ import TradeItem from './TradeItem';
 class TradeScreen extends Component {
 
     state = {
+        shares: '',
+        limitPrice: '',
+        stopPrice: '',
+        side: '',
+        type: '',
+        timeInForce: '',
         submitted: false,
-        stopPriceEditable: true,
-        limitPriceEditable: true,
+        stopPriceEditable: false,
+        limitPriceEditable: false,
         sideItems: [
             {
                 label: 'Buy',
@@ -101,6 +107,14 @@ class TradeScreen extends Component {
         })
     }
 
+    onTypeChanged = (value) => {
+        this.setState({
+            type: value,
+            limitPrice: '',
+            stopPrice: ''
+        })
+    }
+
     renderBody = (value) => {
         const { orderResult, postingOrder } = this.props
         const {
@@ -120,12 +134,16 @@ class TradeScreen extends Component {
             _limitPriceEditable = false
         } else if (type === 'limit') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !limitPrice
+            _limitPriceEditable = true
             _stopPriceEditable = false
         } else if (type === 'stop') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !stopPrice
+            _stopPriceEditable = true
             _limitPriceEditable = false
         } else if (type === 'stop_limit') {
             disabledSubmitBtn = !side || !timeInForce || !shares || !stopPrice || !limitPrice
+            _stopPriceEditable = true
+            _limitPriceEditable = true
         }
 
         let inputTxtStyle = {
@@ -160,7 +178,7 @@ class TradeScreen extends Component {
                         label='Type'
                         items={typeItems}
                         disabled={submitted}
-                        onValueChange={value => this.setState({ type: value })}
+                        onValueChange={value => this.onTypeChanged(value)}
                     />
                     <TradeItem
                         label='Time in Force'
@@ -176,7 +194,7 @@ class TradeScreen extends Component {
                             style={inputTxtStyle}
                             onChangeText={(text) => this.setState({ limitPrice: text })}
                             value={limitPrice}
-                            keyboardType='number-pad'
+                            keyboardType='decimal-pad'
                             autoCorrect={false}
                             editable={_limitPriceEditable}
                             maxLength={20}
@@ -190,13 +208,13 @@ class TradeScreen extends Component {
                             style={inputTxtStyle}
                             onChangeText={(text) => this.setState({ stopPrice: text })}
                             value={stopPrice}
-                            keyboardType='number-pad'
+                            keyboardType='decimal-pad'
                             autoCorrect={false}
                             editable={_stopPriceEditable}
                             maxLength={20}
                         />
                     </View>
-                    {this.state.submitted && (
+                    {submitted && (
                         <ScrollView style={styles.jsonData}>
                             <Text>
                                 {JSON.stringify(orderResult, undefined, 4)}
@@ -204,7 +222,7 @@ class TradeScreen extends Component {
                         </ScrollView>
                     )}
                 </KeyboardAwareScrollView>
-                {this.state.submitted ?
+                {submitted ?
                     <Button
                         style={styles.button}
                         label="Submitted!"
@@ -235,7 +253,7 @@ class TradeScreen extends Component {
             <View style={styles.mainContainer}>
                 <SearchItem
                     item={value}
-                    symbolStyle={styles.symbol}
+                    isLargeStyle
                 />
                 {this.renderBody(value)}
             </View>
@@ -255,10 +273,6 @@ const styles = {
     },
     h3: {
         ...Fonts.style.h3,
-        color: Colors.BLACK
-    },
-    symbol: {
-        ...Fonts.style.h1,
         color: Colors.BLACK
     },
     rowContainer: {

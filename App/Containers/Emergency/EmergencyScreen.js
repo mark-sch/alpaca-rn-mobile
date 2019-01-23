@@ -41,11 +41,8 @@ class EmergencyScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <View style={styles.statusbar}>
-                    <Image source={Images.logo} style={styles.logo}></Image>
-                </View>
                 <View style={styles.mainContainer}>
-                    <Text style={styles.label}>API Calls In Last Hour: _</Text>
+                    <Text style={styles.label}>API Calls In Last Hour:</Text>
                     <Button
                         style={styles.button}
                         color={suspendStatus ? Colors.COLOR_GREEN : Colors.RED}
@@ -56,12 +53,14 @@ class EmergencyScreen extends Component {
                     <Button
                         style={styles.button}
                         label="LIQUIDATE ALL"
+                        disabled={positions.length === 0}
 						onPress={() => this.props.navigation.navigate('Liquidation')}
 					/>
                     <Text style={styles.label}>Pending Orders: {openOrders.length}</Text>
                     <Button
                         style={styles.button}
                         label="CANCEL ALL"
+                        disabled={openOrders.length === 0}
 						onPress={() => this.props.navigation.navigate('CancelOrder')}
 					/>
                 </View>

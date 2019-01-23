@@ -19,7 +19,7 @@ class PositionItem extends Component {
         const { position, onPress } = this.props
         // console.log('position item:', position)
         const mainValue = `${position.qty}@${formatValue(position.avg_entry_price)}`
-        const plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
+        const plStyle = position.unrealized_intraday_pl >= 0 ? styles.upText : styles.downText
         const percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
 
         return (
