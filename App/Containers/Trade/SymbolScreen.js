@@ -60,7 +60,7 @@ class SymbolScreen extends Component {
         positions.map(position => {
             if (position.symbol === value.symbol) {
                 mainValue = `${position.qty}@${formatValue(position.avg_entry_price)}`
-                plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
+                plStyle = position.unrealized_intraday_pl >= 0 ? styles.upText : styles.downText
                 percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
             }
         })
@@ -126,7 +126,7 @@ class SymbolScreen extends Component {
             <View style={styles.mainContainer}>
                 <SearchItem
                     item={value}
-                    symbolStyle={styles.symbol}
+                    isLargeStyle
                 />
                 {this.renderValueDetail(value)}
             </View>
@@ -151,10 +151,6 @@ const styles = {
     downText: {
         ...Fonts.style.h3,
         color: Colors.COLOR_DARK_RED,
-    },
-    symbol: {
-        ...Fonts.style.h1,
-        color: Colors.BLACK
     },
     positionContain: {
         marginTop: 40,

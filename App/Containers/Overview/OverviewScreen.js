@@ -93,7 +93,7 @@ class OverviewScreen extends Component {
         let positionDownCount = 0
 
         source.forEach(function(el) {
-            if (el.unrealized_intraday_pl > 0) {
+            if (el.unrealized_intraday_pl >= 0) {
                 positionUpCount++;
                 positionUpSum += parseFloat(el.unrealized_intraday_pl)
             } else {
@@ -155,14 +155,11 @@ class OverviewScreen extends Component {
             mergeOrders
         } = this.state
         const positionSum = (positionUpSum + positionDownSum).toFixed(2)
-        const positionSumStyle = positionSum > 0 ? styles.upText : styles.downText
-        const portfolioSumColor = positionSum > 0 ? Colors.COLOR_GREEN: Colors.COLOR_DARK_RED
+        const positionSumStyle = positionSum >= 0 ? styles.upText : styles.downText
+        const portfolioSumColor = positionSum >= 0 ? Colors.COLOR_GREEN: Colors.COLOR_DARK_RED
 
         return (
             <View style={styles.container}>
-                <View style={styles.statusbar}>
-                    <Image source={Images.logo} style={styles.logo} />
-                </View>
                 <View style={styles.mainContainer}>
                     <Text style={styles.label}>
                         Portfolio Value

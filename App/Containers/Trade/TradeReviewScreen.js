@@ -81,7 +81,7 @@ class TradeReviewScreen extends Component {
                     <SearchItem
                         style={{ marginBottom: 45 }}
                         item={value}
-                        symbolStyle={styles.symbol}
+                        isLargeStyle
                     />
                     <KeyValueItem keys='Side' value={orderData.side} />
                     <KeyValueItem keys='Shares' value={orderData.qty} />
@@ -130,10 +130,6 @@ const styles = {
     },
     h3: {
         ...Fonts.style.h3,
-        color: Colors.BLACK
-    },
-    symbol: {
-        ...Fonts.style.h1,
         color: Colors.BLACK
     },
     button: {

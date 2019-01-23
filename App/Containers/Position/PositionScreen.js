@@ -30,9 +30,6 @@ class PositionScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <View style={styles.statusbar}>
-                    <Image source={Images.logo} style={styles.logo}></Image>
-                </View>
                 <View style={styles.mainContainer}>
                     <Text style={styles.label}>Positions</Text>
                     <FlatList
