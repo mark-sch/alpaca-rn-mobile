@@ -34,10 +34,6 @@ class SearchScreen extends Component {
         }
     }
 
-    componentDidMount() {
-        this.queryTextInput.focus()
-    }
-
     filterItems = (query) => {
         const { assets } = this.props
 
@@ -62,6 +58,7 @@ class SearchScreen extends Component {
                         ref={ref => this.queryTextInput = ref}
                         style={styles.searchInput}
                         placeholder='Symbol...'
+                        autoFocus
                         onChangeText={(text) => this.filterItems(text)}
                         value={query}
                         maxLength={40}

@@ -1,4 +1,4 @@
-import { call, put } from 'redux-saga/effects'
+import { call, put, select } from 'redux-saga/effects'
 import AssetsActions from '../Redux/AssetsRedux'
 import {
     getTodayStart,
@@ -6,6 +6,8 @@ import {
     getYesterdayStart,
     getYesterdayEnd
 } from '../Util/Helper';
+
+const getLastRequestTime = state => state.assets.lastRequestTime
 
 export function* getAssetsAttempt(api, action) {
     try {
@@ -35,11 +37,12 @@ export function* getAssetsAttempt(api, action) {
 }
 
 export function* getBarsAttempt(api, action) {
+    const lastRequestTime = yield select(getLastRequestTime)
     const { timeframe, symbols, start, end, day } = action
     try {
         const response = yield call(api.getBars, timeframe, symbols, start, end)
         if (response.ok) {
-            yield put(AssetsActions.getBarsSuccess(response.data, day))
+            yield put(AssetsActions.getBarsSuccess(response.data, day, lastRequestTime))
         } else {
             const message = response.data.message || 'Something went wrong'
             yield put(AssetsActions.getBarsFailure(message))

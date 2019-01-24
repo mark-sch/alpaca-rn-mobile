@@ -6,7 +6,7 @@ const { Types, Creators } = createActions({
     getAssetsSuccess: ['data'],
     getAssetsFailure: ['error'],
     getBarsAttempt: ['timeframe', 'symbols', 'start', 'end', 'day'],
-    getBarsSuccess: ['data', 'day'],
+    getBarsSuccess: ['data', 'day', 'lastRequestTime'],
     getBarsFailure: ['error'],
     resetBars: null
 })
@@ -19,6 +19,8 @@ export const INITIAL_STATE = Immutable({
     bars: null,
     preBars: null,
     fetching: true,
+    lastRequestTime: null,
+    getBarApiCallNo: 0,
     errorMessage: '',
     error: false
 })
@@ -36,13 +38,13 @@ export const getAssetsFailure = (state, action) => {
 }
 
 export const getBarsAttempt = (state, action) => {
-    return state.merge({ fetching: true, error: false, errorMessage: '' })
+    return state.merge({ fetching: true })
 }
 
 export const getBarsSuccess = (state, action) => {
     let { day, data } = action
     let newAssets = state.assets
-    newAssets = newAssets.map(assetItem => {
+    newAssets = newAssets.map(assetItem => { // Reconfigure assets with bar data
         try {
             let count = data[assetItem.symbol].length
             if (count > 0) {
@@ -65,7 +67,12 @@ export const getBarsSuccess = (state, action) => {
         }
     })
 
-    return state.merge({ fetching: false, error: false, errorMessage: '', assets: newAssets })
+    const limitCallNo = Math.floor(state.assets.length / 200) * 2 - 20
+    if (state.getBarApiCallNo > limitCallNo) {
+        return state.merge({ fetching: false, error: false, errorMessage: '', assets: newAssets })
+    } else {
+        return state.merge({ fetching: true, error: false, errorMessage: '', assets: newAssets, getBarApiCallNo: state.getBarApiCallNo + 1 })
+    }
 }
 
 export const getBarsFailure = (state, action) => {
