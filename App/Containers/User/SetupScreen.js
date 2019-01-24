@@ -24,8 +24,8 @@ class SetupScreen extends Component {
 
         this.inputRefs = {}
         this.state = {
-            apiKey: 'PKNM5QAHH7ME43X53ETF',
-            secretKey: 'Xt2qASUGkMegKBZ3dtAQbQIUHYuZE1NwvEycTCOt',
+            apiKey: '',
+            secretKey: '',
             baseUrl: '',
             baseUrlItems: [
                 {
