@@ -67,7 +67,7 @@ export const getBarsSuccess = (state, action) => {
         }
     })
 
-    const limitCallNo = Math.floor(state.assets.length / 200) * 2 - 20
+    const limitCallNo = Math.floor(state.assets.length / 200) * 2 - 35
     if (state.getBarApiCallNo > limitCallNo) {
         return state.merge({ fetching: false, error: false, errorMessage: '', assets: newAssets })
     } else {

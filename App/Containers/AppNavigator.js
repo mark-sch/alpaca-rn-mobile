@@ -131,7 +131,7 @@ const AppNavigator = createStackNavigator(
         Tab: TabStack,
     },
     {
-        initialRouteName: "Tab",
+        initialRouteName: "Setup",
         defaultNavigationOptions: {
             header: null
         }
