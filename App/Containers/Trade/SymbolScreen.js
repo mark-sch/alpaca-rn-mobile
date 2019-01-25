@@ -18,7 +18,9 @@ import {
     convert,
     formatValue,
     getTodayStart,
-    getTodayEnd
+    getTodayEnd,
+    getYesterdayStart,
+    getYesterdayEnd
 } from '../../Util/Helper';
 import NavigationIcon from '../../Components/NavigationIcon'
 import Button from '../../Components/Button'
@@ -41,7 +43,10 @@ class SymbolScreen extends Component {
     componentDidMount() {
         const { navigation, getBars } = this.props
         const value = navigation.getParam('value')
-        this.timer = setInterval(() => this.getData(value, getBars), 5000)
+
+        getBars('1D', value.symbol, getYesterdayStart(), getYesterdayEnd(), 'yesterday')
+        this.getData(value, getBars)
+        // this.timer = setInterval(() => this.getData(value, getBars), 5000)
     }
 
     componentWillUnmount() {

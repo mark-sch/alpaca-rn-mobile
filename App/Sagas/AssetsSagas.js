@@ -1,11 +1,5 @@
 import { call, put, select } from 'redux-saga/effects'
 import AssetsActions from '../Redux/AssetsRedux'
-import {
-    getTodayStart,
-    getTodayEnd,
-    getYesterdayStart,
-    getYesterdayEnd
-} from '../Util/Helper';
 
 const getLastRequestTime = state => state.assets.lastRequestTime
 
@@ -16,17 +10,17 @@ export function* getAssetsAttempt(api, action) {
             let assets = response.data
             yield put(AssetsActions.getAssetsSuccess(assets))
 
-            let i, j, temparray, chunk = 200 //Split array into chunks
-            for (i = 0, j = assets.length; i < j; i += chunk) {
-                temparray = assets.slice(i, i+chunk)
-                let symbols = ''
-                temparray.map(item => {
-                    let div = symbols.length > 0 ? ',' : ''
-                    symbols = symbols + div + item.symbol
-                })
-                yield put(AssetsActions.getBarsAttempt('1Min', symbols, getTodayStart(), getTodayEnd(), 'today'))
-                yield put(AssetsActions.getBarsAttempt('1D', symbols, getYesterdayStart(), getYesterdayEnd(), 'yesterday'))
-            }
+            // let i, j, temparray, chunk = 200 //Split array into chunks
+            // for (i = 0, j = assets.length; i < j; i += chunk) {
+            //     temparray = assets.slice(i, i+chunk)
+            //     let symbols = ''
+            //     temparray.map(item => {
+            //         let div = symbols.length > 0 ? ',' : ''
+            //         symbols = symbols + div + item.symbol
+            //     })
+            //     yield put(AssetsActions.getBarsAttempt('1Min', symbols, getTodayStart(), getTodayEnd(), 'today'))
+            //     yield put(AssetsActions.getBarsAttempt('1D', symbols, getYesterdayStart(), getYesterdayEnd(), 'yesterday'))
+            // }
         } else {
             const message = response.data.message || 'Something went wrong'
             yield put(AssetsActions.getAssetsFailure(message))

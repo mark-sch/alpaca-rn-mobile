@@ -18,7 +18,7 @@ const KeyValueItem = ({ keys, value }) => {
             <Text style={styles.h3}>
                 {keys}
             </Text>
-            <Text style={styles.h2}>
+            <Text style={[styles.h3, { color: Colors.BLACK }]}>
                 {value ? capitalize(value) : '-'}
             </Text>
         </View>

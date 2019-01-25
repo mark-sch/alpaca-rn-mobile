@@ -42,7 +42,6 @@ class EmergencyScreen extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.mainContainer}>
-                    <Text style={styles.label}>API Calls In Last Hour:</Text>
                     <Button
                         style={styles.button}
                         color={suspendStatus ? Colors.COLOR_GREEN : Colors.RED}
