@@ -18,9 +18,10 @@ export const INITIAL_STATE = Immutable({
     assets: [],
     bars: null,
     preBars: null,
-    fetching: true,
+    fetching: false,
+    barFetching: false,
     lastRequestTime: null,
-    getBarApiCallNo: 0,
+    getBarApiCallNo: 1,
     errorMessage: '',
     error: false
 })
@@ -38,7 +39,7 @@ export const getAssetsFailure = (state, action) => {
 }
 
 export const getBarsAttempt = (state, action) => {
-    return state.merge({ fetching: true })
+    return state.merge({ barFetching: true })
 }
 
 export const getBarsSuccess = (state, action) => {
@@ -67,16 +68,16 @@ export const getBarsSuccess = (state, action) => {
         }
     })
 
-    const limitCallNo = Math.floor(state.assets.length / 200) * 2 - 35
-    if (state.getBarApiCallNo > limitCallNo) {
-        return state.merge({ fetching: false, error: false, errorMessage: '', assets: newAssets })
+    const limitCallNo = 2
+    if (state.getBarApiCallNo >= limitCallNo) {
+        return state.merge({ barFetching: false, error: false, errorMessage: '', assets: newAssets, getBarApiCallNo: 1 })
     } else {
-        return state.merge({ fetching: true, error: false, errorMessage: '', assets: newAssets, getBarApiCallNo: state.getBarApiCallNo + 1 })
+        return state.merge({ barFetching: true, error: false, errorMessage: '', assets: newAssets, getBarApiCallNo: state.getBarApiCallNo + 1 })
     }
 }
 
 export const getBarsFailure = (state, action) => {
-    return state.merge({ fetching: false, error: true, errorMessage: action.error })
+    return state.merge({ barFetching: false, error: true, errorMessage: action.error })
 }
 
 export const resetBars = (state, action) => (

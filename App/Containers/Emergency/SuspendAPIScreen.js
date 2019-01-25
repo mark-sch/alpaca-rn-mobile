@@ -72,7 +72,6 @@ class SuspendAPIScreen extends Component {
                     </Text>
                     <Text style={[styles.h3, { marginTop: 20 }]}>
                         You are suspending your API. This will stop any new orders to come in to the system.{"\n\n"}
-                        You sent API calls in last one hour.{"\n\n"}
                         After suspending your API, you can recover it by clicking “RECOVER API” on Emergency tab.
                     </Text>
                     <Button

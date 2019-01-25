@@ -7,13 +7,21 @@ import {
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
+import AssetsActions from '../../Redux/AssetsRedux'
 import {
     ApplicationStyles,
     Images,
     Colors,
 } from '../../Themes'
+import {
+    getTodayStart,
+    getTodayEnd,
+    getYesterdayStart,
+    getYesterdayEnd
+} from '../../Util/Helper'
 import SearchItem from './SearchItem'
 import NavigationIcon from '../../Components/NavigationIcon'
+import Loading from '../../Components/Loading'
 
 class SearchScreen extends Component {
 
@@ -34,18 +42,34 @@ class SearchScreen extends Component {
         }
     }
 
-    filterItems = (query) => {
-        const { assets } = this.props
+    onSearchBarTextChange = _.debounce(() => {
+        this.filterItems()
+    }, 500)
+
+    filterItems = () => {
+        const { assets, getBars } = this.props
+        const { query } = this.state
 
         let filteredItems = _.map(assets, function(el) {
             if (query && el.symbol.toLowerCase().startsWith(query.toLowerCase())) return el
         })
         filteredItems = _.without(filteredItems, undefined)
+        if (filteredItems.length > 199) {
+            filteredItems = filteredItems.slice(0, 199)
+        }
 
         this.setState({
             query,
             filteredItems
         })
+
+        let symbols = ''
+        _.map(filteredItems, function(item) {
+            let div = symbols.length > 0 ? ',' : ''
+            symbols = symbols + div + item.symbol
+        })
+        getBars('1Min', symbols, getTodayStart(), getTodayEnd(), 'today')
+        getBars('1D', symbols, getYesterdayStart(), getYesterdayEnd(), 'yesterday')
     }
 
     render() {
@@ -59,7 +83,10 @@ class SearchScreen extends Component {
                         style={styles.searchInput}
                         placeholder='Symbol...'
                         autoFocus
-                        onChangeText={(text) => this.filterItems(text)}
+                        onChangeText={text => {
+                            this.setState({ query: text })
+                            this.onSearchBarTextChange()
+                        }}
                         value={query}
                         maxLength={40}
                     />
@@ -86,6 +113,7 @@ class SearchScreen extends Component {
                         )
                     }}
                 />
+                {this.props.barFetching && <Loading />}
             </View>
         )
     }
@@ -117,8 +145,13 @@ const mapStateToProps = (state) => {
     return {
         orders: state.orders.orders,
         positions: state.positions.positions,
-        assets: state.assets.assets
+        assets: state.assets.assets,
+        barFetching: state.assets.barFetching
     }
 }
 
-export default connect(mapStateToProps, null)(SearchScreen)
+const mapDispatchToProps = (dispatch) => ({
+    getBars: (timeframe, symbols, start, end, day) => dispatch(AssetsActions.getBarsAttempt(timeframe, symbols, start, end, day)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen)
