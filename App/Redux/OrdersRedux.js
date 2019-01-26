@@ -19,8 +19,8 @@ export default Creators
 
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
-    orders: [],
     openOrders: [],
+    closedOrders: [],
     status: '',
     fetching: false,
     cancelingOrder: false,
@@ -36,9 +36,17 @@ export const getOrdersAttempt = (state, action) => {
 }
 
 export const getOrdersSuccess = (state, action) => {
-    const { status, data } = action
-    if (status === 'all') {
-        return state.merge({ fetching: false, error: false, errorMessage: '', orders: data })    
+    let { status, data } = action
+    data = data.map(item => {
+        item = {
+            ...item,
+            tag: status
+        }
+        return item
+    })
+
+    if (status === 'closed') {
+        return state.merge({ fetching: false, error: false, errorMessage: '', closedOrders: data })
     } else if (status === 'open') {
         return state.merge({ fetching: false, error: false, errorMessage: '', openOrders: data })
     }

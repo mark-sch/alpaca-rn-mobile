@@ -24,7 +24,7 @@ export function* cancelOrderAttempt(api, action) {
         if (response.ok) {
             // showAlertMessage("Cancel order success", "success")
             yield put(OrdersActions.cancelOrderSuccess(response.data))
-            yield put(OrdersActions.getOrdersAttempt('all', `after=${getTodayStart()}&until=${getTodayEnd()}`))
+            yield put(OrdersActions.getOrdersAttempt('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`))
             yield put(OrdersActions.getOrdersAttempt('open', `after=${getTodayStart()}&until=${getTodayEnd()}`))
         } else {
             const message = response.data.message || 'Something went wrong'
@@ -42,7 +42,7 @@ export function* postOrderAttempt(api, action) {
         if (response.ok) {
             // showAlertMessage("Post order success", "success")
             yield put(OrdersActions.postOrderSuccess(response.data))
-            yield put(OrdersActions.getOrdersAttempt('all', `after=${getTodayStart()}&until=${getTodayEnd()}`))
+            yield put(OrdersActions.getOrdersAttempt('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`))
             yield put(OrdersActions.getOrdersAttempt('open', `after=${getTodayStart()}&until=${getTodayEnd()}`))
         } else {
             const message = response.data.message || 'Something went wrong'
