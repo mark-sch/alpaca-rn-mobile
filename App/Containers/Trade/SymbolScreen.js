@@ -58,7 +58,8 @@ class SymbolScreen extends Component {
     }
 
     renderValueDetail = (value) => {
-        const { positions, orders } = this.props
+        const { positions, openOrders, closedOrders } = this.props
+        const orders = openOrders.concat(closedOrders)
         let mainValue, percentValue
         let plStyle
 
@@ -183,7 +184,8 @@ const mapStateToProps = (state) => ({
     bars: state.assets.bars,
     preBars: state.assets.preBars,
     positions: state.positions.positions,
-    orders: state.orders.orders,
+    openOrders: state.orders.openOrders,
+    closedOrders: state.orders.closedOrders
 })
 
 const mapDispatchToProps = (dispatch) => ({

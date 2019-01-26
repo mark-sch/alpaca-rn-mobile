@@ -162,7 +162,6 @@ const styles = {
 const mapStateToProps = (state) => {
     return {
         postingOrder: state.orders.postingOrder,
-        orders: state.orders.orders,
         positions: state.positions.positions,
         orderResult: state.orders.orderResult,
     }

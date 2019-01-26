@@ -143,7 +143,6 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
-        orders: state.orders.orders,
         positions: state.positions.positions,
         assets: state.assets.assets,
         barFetching: state.assets.barFetching

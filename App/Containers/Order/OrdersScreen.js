@@ -31,7 +31,8 @@ class OrdersScreen extends Component {
     }
 
     render() {
-        const { orders } = this.props
+        const { openOrders, closedOrders } = this.props
+        const orders = openOrders.concat(closedOrders)
 
         return (
             <View style={styles.container}>
@@ -71,7 +72,8 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
-        orders: state.orders.orders,
+        openOrders: state.orders.openOrders,
+        closedOrders: state.orders.closedOrders,
     }
 }
 

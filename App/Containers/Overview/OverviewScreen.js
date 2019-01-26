@@ -61,7 +61,7 @@ class OverviewScreen extends Component {
         const { getAccount, getOrders, getPositions } = this.props
 
         getAccount()
-        getOrders('all', `after=${getTodayStart()}&until=${getTodayEnd()}`)
+        getOrders('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`)
         getOrders('open', `after=${getTodayStart()}&until=${getTodayEnd()}`)
         getPositions(showLoading)
     }
@@ -75,15 +75,6 @@ class OverviewScreen extends Component {
         if (positions) {
             this.filterPositions(positions)
         }
-    }
-
-    mergeOrders = (source) => {
-        let mergeOrders = mergeArray(source)
-        mergeOrders.push({ // to render last total row
-            status: 'total',
-            data: []
-        })
-        this.setState( { mergeOrders })
     }
 
     filterPositions = (source) => {
@@ -145,14 +136,14 @@ class OverviewScreen extends Component {
         const {
             account,
             fetching,
-            orders
+            openOrders,
+            closedOrders
         } = this.props
         const {
             positionUpCount,
             positionUpSum,
             positionDownSum,
             positionDownCount,
-            mergeOrders
         } = this.state
         const positionSum = (positionUpSum + positionDownSum).toFixed(2)
         const positionSumStyle = positionSum >= 0 ? styles.upText : styles.downText
@@ -220,37 +211,30 @@ class OverviewScreen extends Component {
                         <Text style={styles.label}>
                             Orders Today
                         </Text>
-                        {mergeOrders && mergeOrders.length > 1 ?
-                            <FlatList
-                                style={styles.list}
-                                data={mergeOrders}
-                                keyExtractor={item => item.status}
-                                renderItem={({ item, index }) => {
-                                    if (mergeOrders.length - 1 === index) {
-                                        return (
-                                            <View>
-                                                <View style={styles.separator} />
-                                                <Text style={[styles.h3, { alignSelf: 'flex-end' }]}>
-                                                    {orders.length}
-                                                </Text>
-                                            </View>
-                                        )
-                                    } else {
-                                        return (
-                                            <View style={styles.ordersRow}>
-                                                <Text style={styles.h3}>
-                                                    {capitalize(item.status)}
-                                                </Text>
-                                                <Text style={styles.h3}>
-                                                    {item.data.length}
-                                                </Text>
-                                            </View>
-                                        )
-                                    }
-                                }}
-                            /> :
-                            this.renderEmptyOrder()
-                        }
+                        <View style={styles.ordersRow}>
+                            <Text style={styles.h3}>
+                                Open
+                            </Text>
+                            <Text style={styles.h3}>
+                                {openOrders.length}
+                            </Text>
+                        </View>
+                        <View style={styles.ordersRow}>
+                            <Text style={styles.h3}>
+                                Closed
+                            </Text>
+                            <Text style={styles.h3}>
+                                {closedOrders.length}
+                            </Text>
+                        </View>
+                        <View style={styles.separator} />
+                        <View style={styles.ordersRow}>
+                            <Text style={styles.h3}>
+                            </Text>
+                            <Text style={styles.h3}>
+                                {openOrders.length + closedOrders.length}
+                            </Text>
+                        </View>
                     </View>
                 </View>
                 {fetching && <Loading />}
@@ -303,7 +287,8 @@ const styles = {
 const mapStateToProps = (state) => {
     return {
         account: state.account.account,
-        orders: state.orders.orders,
+        openOrders: state.orders.openOrders,
+        closedOrders: state.orders.closedOrders,
         positions: state.positions.positions,
         fetching: state.assets.fetching
     }

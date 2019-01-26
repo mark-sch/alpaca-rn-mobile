@@ -20,8 +20,7 @@ class OrderItem extends Component {
 
     render() {
         const { order, onPress } = this.props
-        // console.log('order item:', order)
-        const mainValue = `${order.qty} | ${capitalize(order.type)} ${capitalize(order.side)} ${capitalize(order.time_in_force)}`
+        const mainValue = `${order.qty} (${order.filled_qty} filled) | ${capitalize(order.type)} ${capitalize(order.side)} ${capitalize(order.time_in_force)}`
         const timeValue = capitalize(order.status) + ': ' + changeTimeFormat(order.submitted_at)
 
         return (
@@ -31,8 +30,8 @@ class OrderItem extends Component {
                 onPress={onPress}
             >
                 <View style={styles.rowContainer}>
-                    <Text style={styles.actionLabel}>
-                        {order.status}
+                    <Text style={[styles.actionLabel, { backgroundColor: order.tag === 'open' ? Colors.COLOR_LIGHT_YELLOW : 'transparent' }]}>
+                        {order.tag}
                     </Text>
                     <Text style={styles.h3}>
                         {timeValue}

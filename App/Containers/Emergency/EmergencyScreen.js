@@ -90,7 +90,6 @@ const mapStateToProps = (state) => {
         cancelingOrder: state.orders.cancelingOrder,
         postingOrder: state.orders.postingOrder,
         fetching: state.account.fetching,
-        orders: state.orders.orders,
         openOrders: state.orders.openOrders,
         positions: state.positions.positions
     }

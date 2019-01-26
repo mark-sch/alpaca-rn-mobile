@@ -3,10 +3,12 @@ import {
     View,
     Text,
     TextInput,
-    ScrollView
+    ScrollView,
+    TouchableWithoutFeedback,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import dismissKeyboard from 'react-native-dismiss-keyboard'
 
 import {
     ApplicationStyles,
@@ -91,14 +93,25 @@ class TradeScreen extends Component {
     reviewOrder = (value) => {
         const { shares, limitPrice, stopPrice, side, type, timeInForce } = this.state
 
-        const orderData = {
+        let orderData = {
             symbol: value.symbol,
             qty: shares,
             type,
             time_in_force: timeInForce,
             side,
-            limit_price: limitPrice,
-            stop_price: stopPrice
+        }
+
+        if (limitPrice) {
+            orderData = {
+                ...orderData,
+                limit_price: limitPrice,
+            }
+        }
+        if (stopPrice) {
+            orderData = {
+                ...orderData,
+                stop_price: stopPrice
+            }
         }
         console.log('updated value:', orderData)
         this.props.navigation.navigate('TradeReview', {
@@ -250,13 +263,15 @@ class TradeScreen extends Component {
         const value = navigation.getParam('value')
 
         return (
-            <View style={styles.mainContainer}>
-                <SearchItem
-                    item={value}
-                    isLargeStyle
-                />
-                {this.renderBody(value)}
-            </View>
+            <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+                <View style={styles.mainContainer}>
+                    <SearchItem
+                        item={value}
+                        isLargeStyle
+                    />
+                    {this.renderBody(value)}
+                </View>
+            </TouchableWithoutFeedback>
         )
     }
 }

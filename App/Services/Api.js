@@ -35,7 +35,7 @@ const create = (baseURL = config.BASE_URL) => {
     }
     const getAccount = () => api.get('v1/account')
     const configureAccount = data => api.patch('v1/account/configurations', data)
-    const getOrders = (status, params) => api.get(`v1/orders?status=${status}&${params}`)
+    const getOrders = (status, params) => api.get(`v1/orders?status=${status}&direction=desc&${params}`)
     const cancelOrder = order_id => api.delete(`v1/orders/${order_id}`)
     const postOrder = data => api.post('v1/orders', data)
     const getPositions = () => api.get('v1/positions')
