@@ -30,7 +30,7 @@ class OrderItem extends Component {
                 onPress={onPress}
             >
                 <View style={styles.rowContainer}>
-                    <Text style={[styles.actionLabel, { backgroundColor: order.tag === 'open' ? Colors.COLOR_LIGHT_YELLOW : 'transparent' }]}>
+                    <Text style={[styles.actionLabel, { backgroundColor: order.tag === 'open' ? Colors.COLOR_LIGHT_YELLOW : Colors.COLOR_GRAY }]}>
                         {order.tag}
                     </Text>
                     <Text style={styles.h3}>

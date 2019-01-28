@@ -58,16 +58,25 @@ class SymbolScreen extends Component {
     }
 
     renderValueDetail = (value) => {
-        const { positions, openOrders, closedOrders } = this.props
+        const { positions, openOrders, closedOrders, assets } = this.props
         const orders = openOrders.concat(closedOrders)
         let mainValue, percentValue
         let plStyle
+        let currentStockPrice = 0
+
+        if (assets) {
+            assets.map(assetItem => {
+                if (assetItem.symbol === value.symbol) {
+                    currentStockPrice = assetItem.todayBar && assetItem.todayBar.o
+                }
+            })
+        }
 
         positions.map(position => {
             if (position.symbol === value.symbol) {
                 mainValue = `${position.qty}@${formatValue(position.avg_entry_price)}`
-                plStyle = position.unrealized_intraday_pl >= 0 ? styles.upText : styles.downText
-                percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
+                percentValue = ((currentStockPrice - position.avg_entry_price) / position.avg_entry_price * 100).toFixed(2)
+                plStyle = percentValue >= 0 ? styles.upText : styles.downText
             }
         })
 
@@ -185,7 +194,8 @@ const mapStateToProps = (state) => ({
     preBars: state.assets.preBars,
     positions: state.positions.positions,
     openOrders: state.orders.openOrders,
-    closedOrders: state.orders.closedOrders
+    closedOrders: state.orders.closedOrders,
+    assets: state.assets.assets
 })
 
 const mapDispatchToProps = (dispatch) => ({

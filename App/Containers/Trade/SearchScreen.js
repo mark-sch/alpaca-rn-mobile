@@ -44,7 +44,7 @@ class SearchScreen extends Component {
 
     onSearchBarTextChange = _.debounce(() => {
         this.filterItems()
-    }, 500)
+    }, 800)
 
     filterItems = () => {
         const { assets, getBars } = this.props
@@ -83,6 +83,7 @@ class SearchScreen extends Component {
                         style={styles.searchInput}
                         placeholder='Symbol...'
                         autoFocus
+                        autoCorrect={false}
                         onChangeText={text => {
                             this.setState({ query: text })
                             this.onSearchBarTextChange()
