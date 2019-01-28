@@ -216,7 +216,7 @@ class OverviewScreen extends Component {
                                 Open
                             </Text>
                             <Text style={styles.h3}>
-                                {openOrders.length}
+                                {openOrders.length.toLocaleString()}
                             </Text>
                         </View>
                         <View style={styles.ordersRow}>
@@ -224,7 +224,7 @@ class OverviewScreen extends Component {
                                 Closed
                             </Text>
                             <Text style={styles.h3}>
-                                {closedOrders.length}
+                                {closedOrders.length.toLocaleString()}
                             </Text>
                         </View>
                         <View style={styles.separator} />
@@ -232,7 +232,7 @@ class OverviewScreen extends Component {
                             <Text style={styles.h3}>
                             </Text>
                             <Text style={styles.h3}>
-                                {openOrders.length + closedOrders.length}
+                                {(openOrders.length + closedOrders.length).toLocaleString()}
                             </Text>
                         </View>
                     </View>
