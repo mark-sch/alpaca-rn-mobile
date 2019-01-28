@@ -31,6 +31,7 @@ export const convert = (value, percent = false) => {
             return `+${value}%`
     } else if (value < 0) {
         value = Math.abs(value)
+        value = value.toFixed(2)
         if (!percent) {
             return `-$${value}`
         } else

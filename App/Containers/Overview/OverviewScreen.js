@@ -158,9 +158,9 @@ class OverviewScreen extends Component {
                     <Text style={styles.h1}>
                         ${account && account.portfolio_value && formatValue(account.portfolio_value)}
                     </Text>
-                    <Text style={[styles.h3, { color: portfolioSumColor }]}>
+                    {/* <Text style={[styles.h3, { color: portfolioSumColor }]}>
                         {convert(positionSum)}
-                    </Text>
+                    </Text> */}
 
                     <Text style={[styles.label, { marginTop: 8 }]}>
                         Buying Power
