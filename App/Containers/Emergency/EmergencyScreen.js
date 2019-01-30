@@ -5,58 +5,62 @@ import {
     Image,
 } from 'react-native'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
+import OrdersActions from '../../Redux/OrdersRedux'
+import AccountActions from '../../Redux/AccountRedux'
 import {
     ApplicationStyles,
     Images,
     Colors,
-    Metrics,
     Fonts
 } from '../../Themes'
 import Button from '../../Components/Button'
+import NavigationIcon from '../../Components/NavigationIcon'
 
 class EmergencyScreen extends Component {
 
-    componentDidMount() {
-        console.log('emergency did mount')
-    }
-
-    componentWillReceiveProps(nextProps) {
+    static navigationOptions = (props) => {
+        return {
+            headerRight: (
+                <NavigationIcon
+                    onPress={() => props.navigation.navigate('Search')}
+                    source={Images.search}
+                />
+            ),
+        }
     }
 
     render() {
         const {
-            orders,
+            openOrders,
             positions,
-            suspendAPI
+            account
         } = this.props
+        const suspendStatus = account.trade_suspended_by_user
 
         return (
             <View style={styles.container}>
-                <View style={styles.statusbar}>
-                    <Image source={Images.logo} style={styles.logo}></Image>
-                </View>
                 <View style={styles.mainContainer}>
-                    <Text style={styles.label}>API Calls In Last Hour: 5,394</Text>
                     <Button
                         style={styles.button}
-                        label="SUSPEND API"
-						isLoading={false}
-						// onPress={() => suspendAPI()}
+                        color={suspendStatus ? Colors.COLOR_GREEN : Colors.RED}
+                        label={suspendStatus ? "RECOVER API" : "SUSPEND API"}
+						onPress={() => this.props.navigation.navigate(suspendStatus ? 'RecoverAPI' : 'SuspendAPI')}
 					/>
                     <Text style={styles.label}>Open Positions: {positions.length}</Text>
                     <Button
                         style={styles.button}
                         label="LIQUIDATE ALL"
-						isLoading={false}
-						// onPress={() => suspendAPI()}
+                        disabled={positions.length === 0}
+						onPress={() => this.props.navigation.navigate('Liquidation')}
 					/>
-                    <Text style={styles.label}>Pending Orders: {orders.length}</Text>
+                    <Text style={styles.label}>Pending Orders: {openOrders.length}</Text>
                     <Button
                         style={styles.button}
                         label="CANCEL ALL"
-						isLoading={false}
-						// onPress={() => suspendAPI()}
+                        disabled={openOrders.length === 0}
+						onPress={() => this.props.navigation.navigate('CancelOrder')}
 					/>
                 </View>
             </View>
@@ -70,12 +74,6 @@ const styles = {
         flex: 1,
         padding: 75
     },
-    logo: {
-        height: Metrics.images.titleLogo,
-        width: Metrics.images.titleLogo,
-        resizeMode: 'contain',
-        marginRight: Metrics.baseMargin
-    },
     label: {
         ...Fonts.style.h3,
         color: Colors.COLOR_GRAY,
@@ -88,13 +86,20 @@ const styles = {
 
 const mapStateToProps = (state) => {
     return {
-        orders: state.orders.orders,
-        positions: state.positions.positions 
+        account: state.account.account,
+        cancelingOrder: state.orders.cancelingOrder,
+        postingOrder: state.orders.postingOrder,
+        fetching: state.account.fetching,
+        openOrders: state.orders.openOrders,
+        positions: state.positions.positions
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        cancelOrder: order_id => dispatch(OrdersActions.cancelOrderAttempt(order_id)),
+        postOrder: data => dispatch(OrdersActions.postOrderAttempt(data)),
+        configureAccount: data => dispatch(AccountActions.configureAccountAttempt(data))
     }
 }
 

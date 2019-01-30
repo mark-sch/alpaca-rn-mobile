@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import AccountActions from '../../Redux/AccountRedux'
 import OrdersActions from '../../Redux/OrdersRedux'
 import PositionsActions from '../../Redux/PositionsRedux'
+import AssetsActions from '../../Redux/AssetsRedux'
 import {
     ApplicationStyles,
     Images,
@@ -19,8 +20,14 @@ import {
 } from '../../Themes'
 import {
     mergeArray,
-    capitalize
+    capitalize,
+    convert,
+    formatValue,
+    getTodayStart,
+    getTodayEnd
 } from '../../Util/Helper';
+import NavigationIcon from '../../Components/NavigationIcon'
+import Loading from '../../Components/Loading'
 
 class OverviewScreen extends Component {
 
@@ -32,11 +39,31 @@ class OverviewScreen extends Component {
         mergeOrders: []
     }
 
+    static navigationOptions = (props) => {
+        return {
+            headerLeft: null,
+            headerRight: (
+                <NavigationIcon
+                    onPress={() => props.navigation.navigate('Search')}
+                    source={Images.search}
+                />
+            ),
+        }
+    }
+
     componentDidMount() {
+        this.props.getAssets()
+        this.getData()
+        this.timer = setInterval(() => this.getData(false), 60000)
+    }
+
+    async getData(showLoading = true) {
         const { getAccount, getOrders, getPositions } = this.props
+
         getAccount()
-        getOrders()
-        getPositions()
+        getOrders('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`)
+        getOrders('open', `after=${getTodayStart()}&until=${getTodayEnd()}`)
+        getPositions(showLoading)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -50,16 +77,6 @@ class OverviewScreen extends Component {
         }
     }
 
-    mergeOrders = (source) => {
-        let mergeOrders = mergeArray(source)
-        mergeOrders.push({
-            status: 'total',
-            data: []
-        })
-        // console.log('------000', mergeOrders)
-        this.setState( { mergeOrders })
-    }
-
     filterPositions = (source) => {
         let positionUpCount = 0
         let positionUpSum = 0
@@ -67,7 +84,7 @@ class OverviewScreen extends Component {
         let positionDownCount = 0
 
         source.forEach(function(el) {
-            if (el.unrealized_intraday_pl > 0) {
+            if (el.unrealized_intraday_pl >= 0) {
                 positionUpCount++;
                 positionUpSum += parseFloat(el.unrealized_intraday_pl)
             } else {
@@ -84,46 +101,72 @@ class OverviewScreen extends Component {
         })
     }
 
+    renderEmptyOrder() {
+        return (
+            <View>
+                <View style={styles.ordersRow}>
+                    <Text style={[styles.h3, { color: Colors.COLOR_GREEN }]}>
+                        Filled
+                    </Text>
+                    <Text style={styles.h3}>
+                        0
+                    </Text>
+                </View>
+                <View style={styles.ordersRow}>
+                    <Text style={[styles.h3, { color: Colors.COLOR_DARK_RED }]}>
+                        Cancelled
+                    </Text>
+                    <Text style={styles.h3}>
+                        0
+                    </Text>
+                </View>
+                <View style={styles.ordersRow}>
+                    <Text style={[styles.h3, { color: Colors.COLOR_GOLD }]}>
+                        Pending
+                    </Text>
+                    <Text style={styles.h3}>
+                        0
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
     render() {
         const {
             account,
-            positions,
-            orders
+            fetching,
+            openOrders,
+            closedOrders
         } = this.props
         const {
             positionUpCount,
             positionUpSum,
             positionDownSum,
             positionDownCount,
-            mergeOrders
         } = this.state
-        const positionSum = positionUpSum + positionDownSum
-        const positionSumStyle = positionSum > 0 ? styles.upText : styles.downText
-        const portfolioSumColor = positionSum > 0 ? Colors.COLOR_GREEN: Colors.COLOR_DARK_RED
+        const positionSum = (positionUpSum + positionDownSum).toFixed(2)
+        const positionSumStyle = positionSum >= 0 ? styles.upText : styles.downText
+        const portfolioSumColor = positionSum >= 0 ? Colors.COLOR_GREEN: Colors.COLOR_DARK_RED
 
-        console.log('account data:', account)
-        console.log('orders data:', orders)
         return (
             <View style={styles.container}>
-                <View style={styles.statusbar}>
-                    <Image source={Images.logo} style={styles.logo} />
-                </View>
                 <View style={styles.mainContainer}>
                     <Text style={styles.label}>
                         Portfolio Value
                     </Text>
                     <Text style={styles.h1}>
-                        ${account && account.portfolio_value}
+                        ${account && account.portfolio_value && formatValue(account.portfolio_value)}
                     </Text>
-                    <Text style={[styles.h3, { color: portfolioSumColor }]}>
-                        ${positionSum}
-                    </Text>
+                    {/* <Text style={[styles.h3, { color: portfolioSumColor }]}>
+                        {convert(positionSum)}
+                    </Text> */}
 
                     <Text style={[styles.label, { marginTop: 8 }]}>
                         Buying Power
                     </Text>
                     <Text style={styles.h2}>
-                        ${account && account.buying_power}
+                        ${account && account.buying_power && formatValue(account.buying_power)}
                     </Text>
 
                     <View style={styles.section}>
@@ -138,7 +181,7 @@ class OverviewScreen extends Component {
                                 {positionUpCount}
                             </Text>
                             <Text style={[styles.upText, { textAlign: 'right' }]}>
-                                ${positionUpSum}
+                                {convert(positionUpSum)}
                             </Text>
                         </View>
                         <View style={styles.positionsRow}>
@@ -149,7 +192,7 @@ class OverviewScreen extends Component {
                                 {positionDownCount}
                             </Text>
                             <Text style={[styles.downText, { textAlign: 'right' }]}>
-                                ${positionDownSum}
+                                {convert(positionDownSum)}
                             </Text>
                         </View>
                         <View style={styles.separator} />
@@ -159,7 +202,7 @@ class OverviewScreen extends Component {
                                 {positionUpCount + positionDownCount}
                             </Text>
                             <Text style={[positionSumStyle, { textAlign: 'right' }]}>
-                                ${positionSum}
+                                {convert(positionSum)}
                             </Text>
                         </View>
                     </View>
@@ -168,36 +211,33 @@ class OverviewScreen extends Component {
                         <Text style={styles.label}>
                             Orders Today
                         </Text>
-                        <FlatList
-                            style={styles.list}
-                            data={mergeOrders}
-                            keyExtractor={item => item.status}
-                            renderItem={({ item, index }) => {
-                                if (mergeOrders.length - 1 === index) {
-                                    return (
-                                        <View>
-                                            <View style={styles.separator} />
-                                            <Text style={[styles.h3, { alignSelf: 'flex-end' }]}>
-                                                {orders.length}
-                                            </Text>
-                                        </View>
-                                    )
-                                } else {
-                                    return (
-                                        <View style={styles.ordersRow}>
-                                            <Text style={styles.h3}>
-                                                {capitalize(item.status)}
-                                            </Text>
-                                            <Text style={styles.h3}>
-                                                {item.data.length}
-                                            </Text>
-                                        </View>
-                                    )
-                                }
-                            }}
-                        />
+                        <View style={styles.ordersRow}>
+                            <Text style={styles.h3}>
+                                Open
+                            </Text>
+                            <Text style={styles.h3}>
+                                {openOrders.length.toLocaleString()}
+                            </Text>
+                        </View>
+                        <View style={styles.ordersRow}>
+                            <Text style={styles.h3}>
+                                Closed
+                            </Text>
+                            <Text style={styles.h3}>
+                                {closedOrders.length.toLocaleString()}
+                            </Text>
+                        </View>
+                        <View style={styles.separator} />
+                        <View style={styles.ordersRow}>
+                            <Text style={styles.h3}>
+                            </Text>
+                            <Text style={styles.h3}>
+                                {(openOrders.length + closedOrders.length).toLocaleString()}
+                            </Text>
+                        </View>
                     </View>
                 </View>
+                {fetching && <Loading />}
             </View>
         )
     }
@@ -205,12 +245,6 @@ class OverviewScreen extends Component {
 
 const styles = {
     ...ApplicationStyles.screen,
-    logo: {
-        height: Metrics.images.titleLogo,
-        width: Metrics.images.titleLogo,
-        resizeMode: 'contain',
-        marginRight: Metrics.baseMargin
-    },
     h1: {
         ...Fonts.style.h1,
         color: Colors.COLOR_CORE_TEXT
@@ -222,10 +256,6 @@ const styles = {
     h3: {
         ...Fonts.style.h3,
         color: Colors.COLOR_CORE_TEXT
-    },
-    label: {
-        ...Fonts.style.h3,
-        color: Colors.COLOR_GRAY
     },
     section: {
         marginTop: 40,
@@ -257,16 +287,19 @@ const styles = {
 const mapStateToProps = (state) => {
     return {
         account: state.account.account,
-        orders: state.orders.orders,
-        positions: state.positions.positions
+        openOrders: state.orders.openOrders,
+        closedOrders: state.orders.closedOrders,
+        positions: state.positions.positions,
+        fetching: state.assets.fetching
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         getAccount: () => dispatch(AccountActions.getAccountAttempt()),
-        getOrders: () => dispatch(OrdersActions.getOrdersAttempt()),
-        getPositions: () => dispatch(PositionsActions.getPositionsAttempt())
+        getOrders: (status, params) => dispatch(OrdersActions.getOrdersAttempt(status, params)),
+        getPositions: (showLoading) => dispatch(PositionsActions.getPositionsAttempt(showLoading)),
+        getAssets: () => dispatch(AssetsActions.getAssetsAttempt()),
     }
 }
 

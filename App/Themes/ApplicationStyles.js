@@ -10,14 +10,27 @@ const ApplicationStyles = {
         },
         mainContainer: {
             flex: 1,
-            padding: 30
+            padding: 33
         },
         statusbar: {
-            height: Metrics.navBarHeight,
+            height: 0,
             backgroundColor: Colors.COLOR_NAV_HEADER,
             justifyContent: 'center',
             alignItems:'center',
             flexDirection:'row'
+        },
+        navIcon: {
+            height: 27,
+            width: 27,
+            resizeMode: 'contain',
+            marginRight: Metrics.baseMargin,
+            marginLeft: Metrics.baseMargin
+        },
+        logo: {
+            height: Metrics.images.titleLogo,
+            width: Metrics.images.titleLogo,
+            resizeMode: 'contain',
+            marginRight: Metrics.baseMargin
         },
         tabContainer: {
             flex: 1,
@@ -38,16 +51,16 @@ const ApplicationStyles = {
             width: Metrics.images.medium,
             height: Metrics.images.medium,
         },
-        emergencyTabBarImage: {
-            width: 48,
-            height: 48,
-        },
         separator: {
             height: 0.5,
             backgroundColor: Colors.COLOR_GRAY,
             marginTop: 2,
             marginBottom: 2
-        }
+        },
+        label: {
+            ...Fonts.style.h3,
+            color: Colors.COLOR_GRAY
+        },
     }
 }
 

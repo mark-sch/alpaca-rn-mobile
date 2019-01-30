@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {
     View,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native'
 import PropTypes from 'prop-types'
 
@@ -10,24 +11,29 @@ import {
     Colors,
     Fonts
 } from '../../Themes'
+import { convert, formatValue } from '../../Util/Helper';
 
 class PositionItem extends Component {
 
     render() {
-        const { position } = this.props
+        const { position, onPress } = this.props
         // console.log('position item:', position)
-        const mainValue = `${position.qty}@${position.avg_entry_price}`
-        const plStyle = position.unrealized_intraday_pl > 0 ? styles.upText : styles.downText
+        const mainValue = `${position.qty}@${formatValue(position.avg_entry_price)}`
+        const plStyle = position.unrealized_intraday_pl >= 0 ? styles.upText : styles.downText
         const percentValue = (position.unrealized_intraday_plpc * 100).toFixed(2)
 
         return (
-            <View style={{ marginBottom: 10 }}>
+            <TouchableOpacity
+                style={{ marginBottom: 10 }}
+                activeOpacity={0.9}
+                onPress={onPress}
+            >
                 <View style={styles.rowContainer}>
                     <Text style={styles.h2}>
                         {position.symbol}
                     </Text>
                     <Text style={plStyle}>
-                        ${position.unrealized_intraday_pl}
+                        {convert(position.unrealized_intraday_pl)}
                     </Text>
                 </View>
                 <View style={styles.rowContainer}>
@@ -35,11 +41,11 @@ class PositionItem extends Component {
                         {mainValue}
                     </Text>
                     <Text style={plStyle}>
-                        {percentValue}%
+                        {convert(percentValue, true)}
                     </Text>
                 </View>
                 <View style={styles.separator} />
-            </View>
+            </TouchableOpacity>
         )
     }
 }

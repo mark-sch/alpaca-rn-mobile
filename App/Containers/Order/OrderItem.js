@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import {
     View,
-    Text
+    Text,
+    TouchableOpacity
 } from 'react-native'
 import PropTypes from 'prop-types'
 
@@ -18,16 +19,19 @@ import {
 class OrderItem extends Component {
 
     render() {
-        const { order } = this.props
-        // console.log('order item:', order)
-        const mainValue = `${order.qty} | ${capitalize(order.type)} ${capitalize(order.side)} ${capitalize(order.time_in_force)}`
+        const { order, onPress } = this.props
+        const mainValue = `${order.qty} (${order.filled_qty} filled) | ${capitalize(order.type)} ${capitalize(order.side)} ${capitalize(order.time_in_force)}`
         const timeValue = capitalize(order.status) + ': ' + changeTimeFormat(order.submitted_at)
 
         return (
-            <View style={{ marginBottom: 10 }}>
+            <TouchableOpacity
+                style={{ marginBottom: 10 }}
+                activeOpacity={0.9}
+                onPress={onPress}
+            >
                 <View style={styles.rowContainer}>
-                    <Text style={styles.actionLabel}>
-                        {order.status}
+                    <Text style={[styles.actionLabel, { backgroundColor: order.tag === 'open' ? Colors.COLOR_LIGHT_YELLOW : Colors.COLOR_GRAY }]}>
+                        {order.tag}
                     </Text>
                     <Text style={styles.h3}>
                         {timeValue}
@@ -42,7 +46,7 @@ class OrderItem extends Component {
                     </Text>
                 </View>
                 <View style={styles.separator} />
-            </View>
+            </TouchableOpacity>
         )
     }
 }
