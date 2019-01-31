@@ -44,6 +44,10 @@ export const convert = (value, percent = false) => {
     }
 }
 
+/**
+ * Convert to float, round 2 decimals and add commma every 3 digits
+ * return example: 1,256,23.56
+ */
 export const formatValue = (value) => {
     return parseFloat(value).toLocaleString(undefined, {
         minimumFractionDigits: 2,

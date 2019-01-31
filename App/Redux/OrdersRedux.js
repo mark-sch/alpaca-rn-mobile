@@ -12,6 +12,7 @@ const { Types, Creators } = createActions({
     postOrderAttempt: ['data'],
     postOrderSuccess: ['data'],
     postOrderFailure: ['error'],
+    resetOrderStatus: null
 })
 
 export const OrdersTypes = Types
@@ -27,7 +28,8 @@ export const INITIAL_STATE = Immutable({
     postingOrder: false,
     orderResult: null,
     errorMessage: '',
-    error: false
+    error: false,
+    postOrderFailCount: 0
 })
 
 /* ------------- Reducers ------------- */
@@ -77,7 +79,11 @@ export const postOrderSuccess = (state, action) => {
 }
 
 export const postOrderFailure = (state, action) => {
-    return state.merge({ postingOrder: false, error: true, errorMessage: action.error })
+    return state.merge({ postingOrder: false, error: true, errorMessage: action.error, postOrderFailCount: state.postOrderFailCount + 1 })
+}
+
+export const resetOrderStatus = (state, action) => {
+    return state.merge({ postOrderFailCount: 0, orderResult: null })
 }
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -90,5 +96,6 @@ export const reducer = createReducer(INITIAL_STATE, {
     [Types.CANCEL_ORDER_FAILURE]: cancelOrderFailure,
     [Types.POST_ORDER_ATTEMPT]: postOrderAttempt,
     [Types.POST_ORDER_SUCCESS]: postOrderSuccess,
-    [Types.POST_ORDER_FAILURE]: postOrderFailure
+    [Types.POST_ORDER_FAILURE]: postOrderFailure,
+    [Types.RESET_ORDER_STATUS]: resetOrderStatus
 })
