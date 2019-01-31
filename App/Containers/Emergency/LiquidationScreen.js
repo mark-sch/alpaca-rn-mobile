@@ -100,12 +100,13 @@ class LiquidationScreen extends Component {
                             All Positions
                         </Text>
                         <Text style={[styles.h3, { marginTop: 20 }]}>
-                            You are placing an order to sell all your positions with market order within Alpaca's Pattern Day Trader (PDT) Protection.{"\n"}
-                            Therefore, some or all of your orders may get rejected if it could potentially result in the account being flagged for PDT.{"\n"}
-                            This protection triggers only when the account equity is less than $25k at the time of order submission.
-                        </Text>
-                        <Text style={styles.linkText} onPress={this.openURL}>
-                            (Please see the doc for more information){"\n"}
+                            You are placing an order to sell all your positions with market order within Alpaca's Pattern Day Trader (PDT) Protection.
+                            Therefore, some or all of your orders may get rejected if it could potentially result in the account being flagged for PDT.
+                            This protection triggers only when the account equity is less than $25k at the time of order submission. (Please see{" "}
+                            <Text style={styles.linkText} onPress={this.openURL}>
+                                the Doc
+                            </Text>
+                            {" "}for more information){"\n"}
                         </Text>
                         <Text style={styles.h3}>
                             You currently have {positions.length} total positions in {this.getPositionsArray()}.
@@ -190,7 +191,8 @@ const styles = {
     linkText: {
         ...Fonts.style.h3,
         color: Colors.BLACK,
-        textDecorationLine: 'underline'
+        textDecorationLine: 'underline',
+        paddingLeft: 15
     }
 }
 
