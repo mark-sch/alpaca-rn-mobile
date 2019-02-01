@@ -29,7 +29,8 @@ export const INITIAL_STATE = Immutable({
     orderResult: null,
     errorMessage: '',
     error: false,
-    postOrderFailCount: 0
+    postOrderFailCount: 0,
+    postOrderErrorMessages: ''
 })
 
 /* ------------- Reducers ------------- */
@@ -79,11 +80,17 @@ export const postOrderSuccess = (state, action) => {
 }
 
 export const postOrderFailure = (state, action) => {
-    return state.merge({ postingOrder: false, error: true, errorMessage: action.error, postOrderFailCount: state.postOrderFailCount + 1 })
+    let postOrderErrorMessages = state.postOrderErrorMessages.concat(action.error).concat("\n")
+    return state.merge({
+        postingOrder: false,
+        error: true,
+        postOrderFailCount: state.postOrderFailCount + 1,
+        postOrderErrorMessages
+    })
 }
 
 export const resetOrderStatus = (state, action) => {
-    return state.merge({ postOrderFailCount: 0, orderResult: null })
+    return state.merge({ postOrderFailCount: 0, orderResult: null, postOrderErrorMessages: '' })
 }
 
 /* ------------- Hookup Reducers To Types ------------- */

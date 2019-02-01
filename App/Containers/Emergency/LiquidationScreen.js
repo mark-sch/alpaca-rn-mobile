@@ -45,6 +45,9 @@ class LiquidationScreen extends Component {
         }
     }
 
+    /**
+     * Post your order
+     */
     requestOrders = () => {
         const {
             positions,
@@ -64,7 +67,10 @@ class LiquidationScreen extends Component {
         })
     }
 
-    getPositionsArray = () => {
+    /** 
+     * Append symbols with commma from positions
+    */
+    getSymbols = () => {
         const { positions } = this.props
         let symbols = ''
         positions.map(item => {
@@ -75,6 +81,9 @@ class LiquidationScreen extends Component {
         return symbols
     }
 
+    /**
+     * Open url in browser
+     */
     openURL = () => {
         const docUrl = 'https://docs.alpaca.markets/broker-functions/pdt-protection/'
         Linking.canOpenURL(docUrl).then(supported => {
@@ -88,7 +97,7 @@ class LiquidationScreen extends Component {
 
     renderContent = () => {
         const { condition } = this.state
-        const { positions, postingOrder, orderResult, postOrderFailCount } = this.props
+        const { positions, postingOrder, orderResult, postOrderFailCount, postOrderErrorMessages } = this.props
 
         let content
         if (condition === 'LIQUIDATION') {
@@ -109,7 +118,7 @@ class LiquidationScreen extends Component {
                             {" "}for more information){"\n"}
                         </Text>
                         <Text style={styles.h3}>
-                            You currently have {positions.length} total positions in {this.getPositionsArray()}.
+                            You currently have {positions.length} total positions in {this.getSymbols()}.
                         </Text>
                     </ScrollView>
                     <Button
@@ -125,19 +134,29 @@ class LiquidationScreen extends Component {
             )
         } else if (condition === 'LIQUIDATION_SUCCESS') {
             const orderStatus = postOrderFailCount > 0 ? `Order Submitted (${postOrderFailCount} orders rejected)` : 'Order Submitted'
+            let contentOrderResult
+
+            if (orderResult) {
+                contentOrderResult = (
+                    <Text style={{ color: 'white' }}>
+                        {JSON.stringify(orderResult, undefined, 4)}
+                    </Text>
+                )
+            } else if (postOrderErrorMessages) {
+                contentOrderResult = (
+                    <Text style={{ color: 'white' }}>
+                        {postOrderErrorMessages}
+                    </Text>
+                )
+            }
             content = (
                 <View style={styles.container}>
                     <Text style={styles.label}>
                         {orderStatus}
                     </Text>
-                    {
-                        orderResult &&
-                        <ScrollView style={styles.jsonData}>
-                            <Text style={{ color: 'white' }}>
-                                {JSON.stringify(orderResult, undefined, 4)}
-                            </Text>
-                        </ScrollView>
-                    }
+                    <ScrollView style={styles.jsonData}>
+                        {contentOrderResult}
+                    </ScrollView>
                     <Button
                         style={styles.button}
                         label="Done"
@@ -182,7 +201,7 @@ const styles = {
         flex: 1,
         marginTop: 20,
         marginBottom: 70,
-        paddingLeft: 5,
+        padding: 7,
         backgroundColor: Colors.COLOR_CORE_TEXT
     },
     scroll: {
@@ -192,7 +211,6 @@ const styles = {
         ...Fonts.style.h3,
         color: Colors.BLACK,
         textDecorationLine: 'underline',
-        paddingLeft: 15
     }
 }
 
@@ -201,7 +219,8 @@ const mapStateToProps = (state) => {
         postingOrder: state.orders.postingOrder,
         positions: state.positions.positions,
         orderResult: state.orders.orderResult,
-        postOrderFailCount: state.orders.postOrderFailCount
+        postOrderFailCount: state.orders.postOrderFailCount,
+        postOrderErrorMessages: state.orders.postOrderErrorMessages
     }
 }
 
