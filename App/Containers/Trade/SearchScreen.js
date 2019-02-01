@@ -42,10 +42,16 @@ class SearchScreen extends Component {
         }
     }
 
+    /**
+     * Delay 800ms after finish typing for better UX
+     */
     onSearchBarTextChange = _.debounce(() => {
         this.filterItems()
     }, 800)
 
+    /**
+     * Get filtered items by search query and get bars
+     */
     filterItems = () => {
         const { assets, getBars } = this.props
         const { query } = this.state

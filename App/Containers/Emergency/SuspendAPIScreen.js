@@ -49,6 +49,9 @@ class SuspendAPIScreen extends Component {
         }
     }
 
+    /**
+     * Suspend trade
+     */
     suspendTrade = (configureAccount) => {
         let params = {
             "suspend_trade": true

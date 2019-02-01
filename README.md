@@ -35,5 +35,5 @@ react-native run-ios
 
 - Run Android
 ```
-react-native run-android
+Comming soon...
 ```

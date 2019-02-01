@@ -1,7 +1,6 @@
 import { createReducer, createActions } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 
-/* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
     getPositionsAttempt: ['showLoading'],
     getPositionsSuccess: ['data'],
@@ -11,7 +10,6 @@ const { Types, Creators } = createActions({
 export const PositionsTypes = Types
 export default Creators
 
-/* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
     positions: [],
     status: '',
@@ -20,7 +18,6 @@ export const INITIAL_STATE = Immutable({
     error: false
 })
 
-/* ------------- Reducers ------------- */
 export const getPositionsAttempt = (state, action) => {
     const { showLoading } = action
     return state.merge({ fetching: showLoading, error: false, errorMessage: '' })
@@ -34,7 +31,6 @@ export const getPositionsFailure = (state, action) => {
     return state.merge({ fetching: false, error: true, errorMessage: action.error })
 }
 
-/* ------------- Hookup Reducers To Types ------------- */
 export const reducer = createReducer(INITIAL_STATE, {
     [Types.GET_POSITIONS_ATTEMPT]: getPositionsAttempt,
     [Types.GET_POSITIONS_SUCCESS]: getPositionsSuccess,

@@ -52,18 +52,18 @@ class OverviewScreen extends Component {
     }
 
     componentDidMount() {
-        this.props.getAssets()
+        this.props.getAssets() // Get assets
         this.getData()
-        this.timer = setInterval(() => this.getData(false), 60000)
+        this.timer = setInterval(() => this.getData(false), 60000) // Refresh data every 1 minute
     }
 
     async getData(showLoading = true) {
         const { getAccount, getOrders, getPositions } = this.props
 
-        getAccount()
-        getOrders('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`)
-        getOrders('open', `after=${getTodayStart()}&until=${getTodayEnd()}`)
-        getPositions(showLoading)
+        getAccount() // Get account info
+        getOrders('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`) // Get closed orders of today
+        getOrders('open', `after=${getTodayStart()}&until=${getTodayEnd()}`) // Get open orders of today
+        getPositions(showLoading) // Get positions
     }
 
     componentWillReceiveProps(nextProps) {

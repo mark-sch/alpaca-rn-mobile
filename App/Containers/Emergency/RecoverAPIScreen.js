@@ -49,6 +49,9 @@ class RecoverAPIScreen extends Component {
         }
     }
 
+    /**
+     * Recover trade
+     */
     recoverTrade = (configureAccount) => {
         let params = {
             "suspend_trade": false
