@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    Image,
-    FlatList
 } from 'react-native'
 import { connect } from 'react-redux'
 
@@ -236,6 +234,12 @@ class OverviewScreen extends Component {
                             </Text>
                         </View>
                     </View>
+                    <Text
+                        style={[styles.label, { marginTop: 10 }]}
+                        onPress={() => this.props.navigation.navigate('Disclosure')}
+                    >
+                        Disclosures
+                    </Text>
                 </View>
                 {fetching && <Loading />}
             </View>
