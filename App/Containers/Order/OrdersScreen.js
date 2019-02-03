@@ -55,6 +55,12 @@ class OrdersScreen extends Component {
                             )
                         }}
                     />
+                    <Text
+                        style={[styles.label, { marginTop: 10 }]}
+                        onPress={() => this.props.navigation.navigate('Disclosure')}
+                    >
+                        Disclosures
+                    </Text>
                 </View>
             </View>
         )
