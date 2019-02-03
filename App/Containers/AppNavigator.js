@@ -15,6 +15,7 @@ import SuspendAPIScreen from './Emergency/SuspendAPIScreen'
 import RecoverAPIScreen from './Emergency/RecoverAPIScreen'
 import LiquidationScreen from './Emergency/LiquidationScreen'
 import CancelOrderScreen from './Emergency/CancelOrderScreen'
+import DisclosureScreen from './User/DisclosureScreen'
 import TabImage from '../Components/TabImage'
 import { Colors, Images } from '../Themes'
 
@@ -25,6 +26,12 @@ const OverviewStack = createStackNavigator(
         Symbol: SymbolScreen,
         Trade: TradeScreen,
         TradeReview: TradeReviewScreen,
+        Disclosure: {
+            screen: DisclosureScreen,
+            navigationOptions: {
+                tabBarVisible: false
+            }
+        }
     },
     {
         defaultNavigationOptions: {
@@ -42,6 +49,7 @@ const PositionsStack = createStackNavigator(
         Symbol: SymbolScreen,
         Trade: TradeScreen,
         TradeReview: TradeReviewScreen,
+        Disclosure: DisclosureScreen
     },
     {
         defaultNavigationOptions: {
@@ -59,6 +67,7 @@ const OrdersStack = createStackNavigator(
         Symbol: SymbolScreen,
         Trade: TradeScreen,
         TradeReview: TradeReviewScreen,
+        Disclosure: DisclosureScreen
     },
     {
         defaultNavigationOptions: {
@@ -79,7 +88,8 @@ const EmergencyStack = createStackNavigator(
         SuspendAPI: SuspendAPIScreen,
         RecoverAPI: RecoverAPIScreen,
         Liquidation: LiquidationScreen,
-        CancelOrder: CancelOrderScreen
+        CancelOrder: CancelOrderScreen,
+        Disclosure: DisclosureScreen
     },
     {
         defaultNavigationOptions: {

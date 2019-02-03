@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    Image,
-    FlatList
 } from 'react-native'
 import { connect } from 'react-redux'
 
@@ -52,18 +50,18 @@ class OverviewScreen extends Component {
     }
 
     componentDidMount() {
-        this.props.getAssets()
+        this.props.getAssets() // Get assets
         this.getData()
-        this.timer = setInterval(() => this.getData(false), 60000)
+        this.timer = setInterval(() => this.getData(false), 60000) // Refresh data every 1 minute
     }
 
     async getData(showLoading = true) {
         const { getAccount, getOrders, getPositions } = this.props
 
-        getAccount()
-        getOrders('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`)
-        getOrders('open', `after=${getTodayStart()}&until=${getTodayEnd()}`)
-        getPositions(showLoading)
+        getAccount() // Get account info
+        getOrders('closed', `after=${getTodayStart()}&until=${getTodayEnd()}`) // Get closed orders of today
+        getOrders('open', `after=${getTodayStart()}&until=${getTodayEnd()}`) // Get open orders of today
+        getPositions(showLoading) // Get positions
     }
 
     componentWillReceiveProps(nextProps) {
@@ -236,6 +234,12 @@ class OverviewScreen extends Component {
                             </Text>
                         </View>
                     </View>
+                    <Text
+                        style={[styles.label, { marginTop: 10 }]}
+                        onPress={() => this.props.navigation.navigate('Disclosure')}
+                    >
+                        Disclosures
+                    </Text>
                 </View>
                 {fetching && <Loading />}
             </View>

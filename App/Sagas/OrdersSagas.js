@@ -46,7 +46,7 @@ export function* postOrderAttempt(api, action) {
             yield put(OrdersActions.getOrdersAttempt('open', `after=${getTodayStart()}&until=${getTodayEnd()}`))
         } else {
             const message = response.data.message || 'Something went wrong'
-            showAlertMessage(message, "danger")
+            // showAlertMessage(message, "danger")
             yield put(OrdersActions.postOrderFailure(message))
         }
     } catch (error) {
