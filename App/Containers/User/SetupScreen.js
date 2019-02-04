@@ -58,6 +58,10 @@ class SetupScreen extends Component {
         }
     }
 
+    /**
+     * Save user's inputs in local storage and
+     * configure api with api key and base url
+     */
     getStarted = () => {
         const { apiKey, secretKey, baseUrl } = this.state
 

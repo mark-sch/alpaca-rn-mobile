@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import {
     View,
     Text,
-    ScrollView
+    ScrollView,
+    Linking
 } from 'react-native'
 import { connect } from 'react-redux'
 import _ from 'lodash'
@@ -24,7 +25,7 @@ class LiquidationScreen extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.postingOrder && !nextProps.postingOrder && nextProps.orderResult) {
+        if (this.props.postingOrder && !nextProps.postingOrder) {
             this.setState({ condition: 'LIQUIDATION_SUCCESS' })
             this.props.navigation.setParams({ condition: 'LIQUIDATION_SUCCESS' })
         }
@@ -44,12 +45,17 @@ class LiquidationScreen extends Component {
         }
     }
 
+    /**
+     * Post your order
+     */
     requestOrders = () => {
         const {
             positions,
-            postOrder
+            postOrder,
+            resetOrderStatus
         } = this.props
 
+        resetOrderStatus()
         positions.map(item => {
             const updatedItem = {
                 ...item,
@@ -61,7 +67,10 @@ class LiquidationScreen extends Component {
         })
     }
 
-    getPositionsArray = () => {
+    /** 
+     * Append symbols with commma from positions
+    */
+    getSymbols = () => {
         const { positions } = this.props
         let symbols = ''
         positions.map(item => {
@@ -72,22 +81,46 @@ class LiquidationScreen extends Component {
         return symbols
     }
 
+    /**
+     * Open url in browser
+     */
+    openURL = () => {
+        const docUrl = 'https://docs.alpaca.markets/broker-functions/pdt-protection/'
+        Linking.canOpenURL(docUrl).then(supported => {
+            if (supported) {
+                Linking.openURL(docUrl);
+            } else {
+                console.log("Don't know how to open URI: " + docUrl);
+            }
+        })
+    }
+
     renderContent = () => {
         const { condition } = this.state
-        const { positions, postingOrder, orderResult } = this.props
+        const { positions, postingOrder, orderResult, postOrderFailCount, postOrderErrorMessages } = this.props
 
         let content
         if (condition === 'LIQUIDATION') {
             content = (
                 <View style={styles.container}>
-                    <Text style={styles.h1}>
-                        Liquidating{"\n"}
-                        All Positions
-                    </Text>
-                    <Text style={[styles.h3, { marginTop: 20 }]}>
-                        You are placing an order to sell all your positions with market order.{"\n\n"}
-                        You currently have {positions.length} total positions in {this.getPositionsArray()}.
-                    </Text>
+                    <ScrollView style={styles.scroll}>
+                        <Text style={styles.h1}>
+                            Liquidating{"\n"}
+                            All Positions
+                        </Text>
+                        <Text style={[styles.h3, { marginTop: 20 }]}>
+                            You are placing an order to sell all your positions with market order within Alpaca's Pattern Day Trader (PDT) Protection.
+                            Therefore, some or all of your orders may get rejected if it could potentially result in the account being flagged for PDT.
+                            This protection triggers only when the account equity is less than $25k at the time of order submission. (Please see{" "}
+                            <Text style={styles.linkText} onPress={this.openURL}>
+                                the Doc
+                            </Text>
+                            {" "}for more information){"\n"}
+                        </Text>
+                        <Text style={styles.h3}>
+                            You currently have {positions.length} total positions in {this.getSymbols()}.
+                        </Text>
+                    </ScrollView>
                     <Button
                         style={styles.button}
                         label="Click to Submit"
@@ -100,15 +133,29 @@ class LiquidationScreen extends Component {
                 </View>
             )
         } else if (condition === 'LIQUIDATION_SUCCESS') {
+            const orderStatus = postOrderFailCount > 0 ? `Order Submitted (${postOrderFailCount} orders rejected)` : 'Order Submitted'
+            let contentOrderResult
+
+            if (orderResult) {
+                contentOrderResult = (
+                    <Text style={{ color: 'white' }}>
+                        {JSON.stringify(orderResult, undefined, 4)}
+                    </Text>
+                )
+            } else if (postOrderErrorMessages) {
+                contentOrderResult = (
+                    <Text style={{ color: 'white' }}>
+                        {postOrderErrorMessages}
+                    </Text>
+                )
+            }
             content = (
                 <View style={styles.container}>
                     <Text style={styles.label}>
-                        Order Submitted
+                        {orderStatus}
                     </Text>
                     <ScrollView style={styles.jsonData}>
-                        <Text style={{ color: 'white' }}>
-                            {JSON.stringify(orderResult, undefined, 4)}
-                        </Text>
+                        {contentOrderResult}
                     </ScrollView>
                     <Button
                         style={styles.button}
@@ -154,9 +201,17 @@ const styles = {
         flex: 1,
         marginTop: 20,
         marginBottom: 70,
-        paddingLeft: 5,
+        padding: 7,
         backgroundColor: Colors.COLOR_CORE_TEXT
     },
+    scroll: {
+        marginBottom: 60
+    },
+    linkText: {
+        ...Fonts.style.h3,
+        color: Colors.BLACK,
+        textDecorationLine: 'underline',
+    }
 }
 
 const mapStateToProps = (state) => {
@@ -164,12 +219,15 @@ const mapStateToProps = (state) => {
         postingOrder: state.orders.postingOrder,
         positions: state.positions.positions,
         orderResult: state.orders.orderResult,
+        postOrderFailCount: state.orders.postOrderFailCount,
+        postOrderErrorMessages: state.orders.postOrderErrorMessages
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         postOrder: data => dispatch(OrdersActions.postOrderAttempt(data)),
+        resetOrderStatus: () => dispatch(OrdersActions.resetOrderStatus())
     }
 }
 

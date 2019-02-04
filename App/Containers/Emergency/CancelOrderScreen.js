@@ -49,6 +49,9 @@ class CancelOrderScreen extends Component {
         }
     }
 
+    /**
+     * Cancel open orders
+     */
     cancelOrders = () => {
         const {
             openOrders,

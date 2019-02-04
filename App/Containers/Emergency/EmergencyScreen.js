@@ -62,6 +62,12 @@ class EmergencyScreen extends Component {
                         disabled={openOrders.length === 0}
 						onPress={() => this.props.navigation.navigate('CancelOrder')}
 					/>
+                    <Text
+                        style={[styles.label, { marginTop: 30 }]}
+                        onPress={() => this.props.navigation.navigate('Disclosure')}
+                    >
+                        Disclosures
+                    </Text>
                 </View>
             </View>
         )
