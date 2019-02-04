@@ -37,3 +37,11 @@ react-native run-ios
 ```
 react-native run-android
 ```
+
+------------
+
+### Disclosures
+
+Brokerage services are provided by Alpaca Securities LLC ("Alpaca"), member FINRA/SIPC, a wholly-owned subsidiary of [AlpacaDB, Inc.](https://alpaca.markets).
+
+Please see the `DISCLOSURES` file in this repository for more information.
